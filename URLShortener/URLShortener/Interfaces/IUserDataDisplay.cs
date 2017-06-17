@@ -9,7 +9,7 @@ namespace URLShortener.Interfaces
     /// <summary>
     /// Интерфейс для отображения данных идентифицированному пользователю
     /// </summary>
-    internal interface IUserDataDisplay
+    public interface IUserDataDisplay
     {
         /// <summary>
         /// Возвращает пагинированные данные 
@@ -18,14 +18,15 @@ namespace URLShortener.Interfaces
         /// <param name="pageSize">количество записей на странице</param>
         /// <param name="direction">направление сортировки</param>
         /// <param name="sortColumn">колонка по которой сортировать</param>
+        /// <param name="pageNumber">номер страницы</param>
         /// <returns>пагинированные ссылки</returns>
-        List<IDisplayedLink> GetUserPaginatedLinks(int? tokenId, int pageSize, bool direction, int sortColumn);
+        List<IDisplayedLink> GetUserPaginatedLinks(int? tokenId, int pageSize, bool direction, int sortColumn, int pageNumber);
     }
 
     /// <summary>
     /// Интерфейс для отображения ссылки пользователя
     /// </summary>
-    internal interface IDisplayedLink
+    public interface IDisplayedLink
     {
         /// <summary>
         /// Оригинальная ссылка

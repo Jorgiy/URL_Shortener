@@ -181,6 +181,7 @@
     <Compile Include="Interfaces\ITokenOperaions.cs" />
     <Compile Include="Interfaces\IUserDataDisplay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\UserDataDisplay.cs" />
     <Compile Include="Tools\Logger.cs" />
   </ItemGroup>
   <ItemGroup>

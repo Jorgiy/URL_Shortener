@@ -9,7 +9,7 @@ namespace URLShortener.Interfaces
     /// <summary>
     /// Интерфейс для работы с cookies
     /// </summary>
-    internal interface ITokenOperaions
+    public interface ITokenOperaions
     {
         /// <summary>
         /// Метод создающий токен и его связку с ссылкой
@@ -30,7 +30,7 @@ namespace URLShortener.Interfaces
     /// <summary>
     /// Интерфейс, представляющий собой резуьтат создания cookie-токена
     /// </summary>
-    internal interface ITokenCreationResult
+    public interface ITokenCreationResult
     {
         /// <summary>
         /// Выданный Cookie

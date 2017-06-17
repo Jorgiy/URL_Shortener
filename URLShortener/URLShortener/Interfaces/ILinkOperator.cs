@@ -9,7 +9,7 @@ namespace URLShortener.Interfaces
     /// <summary>
     /// Интерфейс, для реализации конеченого создания ссылок
     /// </summary>
-    internal interface ILinkOperator
+    public interface ILinkOperator
     {
         /// <summary>
         /// Метод укорачивающий ссылку и добавляющий её в БД
@@ -29,7 +29,7 @@ namespace URLShortener.Interfaces
     /// <summary>
     /// Результат создания ссылки
     /// </summary>
-    internal interface ILinkCreationResult
+    public interface ILinkCreationResult
     {
         /// <summary>
         /// Новая, зарегистрированная короткая ссылка
