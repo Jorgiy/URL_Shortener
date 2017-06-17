@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 
 namespace URLShortener.Interfaces
 {
@@ -14,13 +15,13 @@ namespace URLShortener.Interfaces
         /// <summary>
         /// Возвращает пагинированные данные 
         /// </summary>
-        /// <param name="tokenId">токен пользователя</param>
+        /// <param name="token">токен пользователя</param>
         /// <param name="pageSize">количество записей на странице</param>
         /// <param name="direction">направление сортировки</param>
         /// <param name="sortColumn">колонка по которой сортировать</param>
         /// <param name="pageNumber">номер страницы</param>
         /// <returns>пагинированные ссылки</returns>
-        List<IDisplayedLink> GetUserPaginatedLinks(int? tokenId, int pageSize, bool direction, int sortColumn, int pageNumber);
+        List<IDisplayedLink> GetUserPaginatedLinks(string token, int pageSize, SortDirection direction, int sortColumn, int pageNumber);
     }
 
     /// <summary>
