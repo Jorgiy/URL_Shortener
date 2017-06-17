@@ -10,24 +10,24 @@ namespace URLShortener.Converters
         /// <summary>
         /// Кэффициент а
         /// </summary>
-        private const uint CoefficientA = 16807;
+        private const int CoefficientA = 16807;
 
         /// <summary>
         /// Кэффициент M
         /// </summary>
-        private const uint CoefficientM = uint.MaxValue / 2;
+        private const int CoefficientM = int.MaxValue;
 
         /// <summary>
         /// Кэффициент C
         /// </summary>
-        private const uint CoefficientC = 0;
+        private const int CoefficientC = 0;
 
         /// <summary>
-        /// Выполняет преобразование, гарантируя отсутствие повторов от 1 до 2^31-1
+        /// Выполняет преобразование, гарантируя отсутствие повторов в диапазонах длиной 2^31-1 чисел
         /// </summary>
         /// <param name="input">входное число</param>
         /// <returns>псевдослучайный результат</returns>
-        public static uint MakeConversion(uint input)
+        public static int MakeConversion(int input)
         {
             return (input * CoefficientA + CoefficientC) % CoefficientM;
         }
