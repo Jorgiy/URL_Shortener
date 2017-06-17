@@ -6,6 +6,7 @@ using System.Web.Helpers;
 using URLShortener.DataContexts;
 using URLShortener.Interfaces;
 using URLShortener.Models;
+using URLShortener.Tools;
 
 namespace URLShortener.Services
 {
@@ -18,43 +19,50 @@ namespace URLShortener.Services
             var db = new UrlShortenerBaseEntities();
             var sortCol = (SortCpoumnTypes) sortColumn;
 
-            if (direction == SortDirection.Ascending)
+            try
             {
-                return
-                    new List<IDisplayedLink>(db.TokenMapping.Include("Tokens")
-                        .Include("Links")
-                        .Where(c => c.Tokens.Token == token && c.Links.Id == c.LinkId)
-                        .OrderBy(fields => SortColumnChoise(sortCol, fields))
-                        .Select(page => page.Links)
-                        .ToList()
-                        .Select(
-                            links =>
-                                new DisplayedLink()
-                                {
-                                    OriginalLink = links.Url,
-                                    CreationDate = links.CreationDate,
-                                    Follows = links.Follows,
-                                    ShortedLink = links.ShortUrl
-                                }).ToList().GetRange((pageNumber - 1) * pageSize, pageSize));
+                if (direction == SortDirection.Ascending)
+                {
+                    return
+                        new List<IDisplayedLink>(db.TokenMapping.Include("Tokens")
+                            .Include("Links")
+                            .Where(c => c.Tokens.Token == token && c.Links.Id == c.LinkId)
+                            .OrderBy(fields => SortColumnChoise(sortCol, fields))
+                            .Select(page => page.Links)
+                            .ToList()
+                            .Select(
+                                links =>
+                                    new DisplayedLink()
+                                    {
+                                        OriginalLink = links.Url,
+                                        CreationDate = links.CreationDate,
+                                        Follows = links.Follows,
+                                        ShortedLink = links.ShortUrl
+                                    }).ToList().GetRange((pageNumber - 1) * pageSize, pageSize));
+                }
+                else
+                {
+                    return
+                        new List<IDisplayedLink>(db.TokenMapping.Include("Tokens")
+                            .Include("Links")
+                            .Where(c => c.Tokens.Token == token && c.Links.Id == c.LinkId)
+                            .OrderByDescending(fields => SortColumnChoise(sortCol, fields))
+                            .Select(page => page.Links)
+                            .ToList()
+                            .Select(
+                                links =>
+                                    new DisplayedLink()
+                                    {
+                                        OriginalLink = links.Url,
+                                        CreationDate = links.CreationDate,
+                                        Follows = links.Follows,
+                                        ShortedLink = links.ShortUrl
+                                    }).ToList().GetRange((pageNumber - 1) * pageSize, pageSize));
+                }
             }
-            else
+            catch (Exception exc)
             {
-                return
-                    new List<IDisplayedLink>(db.TokenMapping.Include("Tokens")
-                        .Include("Links")
-                        .Where(c => c.Tokens.Token == token && c.Links.Id == c.LinkId)
-                        .OrderByDescending(fields => SortColumnChoise(sortCol, fields))
-                        .Select(page => page.Links)
-                        .ToList()
-                        .Select(
-                            links =>
-                                new DisplayedLink()
-                                {
-                                    OriginalLink = links.Url,
-                                    CreationDate = links.CreationDate,
-                                    Follows = links.Follows,
-                                    ShortedLink = links.ShortUrl
-                                }).ToList().GetRange((pageNumber - 1) * pageSize, pageSize));
+                throw new BuisenessException("Ошибка на стороне базы данных", exc) {ErrorLevel = ErrorType.Critical};
             }
         }
 

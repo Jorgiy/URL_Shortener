@@ -183,6 +183,7 @@
     <Compile Include="Models\DisplayedLink.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\UserDataDisplay.cs" />
+    <Compile Include="Tools\BuisenessException.cs" />
     <Compile Include="Tools\Logger.cs" />
   </ItemGroup>
   <ItemGroup>

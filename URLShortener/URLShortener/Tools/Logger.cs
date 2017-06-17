@@ -27,7 +27,7 @@ namespace URLShortener.Tools
                     try
                     {
                         using (
-                            var file = new FileStream($"{errorDateTime.Date:yyyy-MM-dd}_{type.ToString()}.txt",
+                            var file = new FileStream($"{errorDateTime.Date:yyyy-MM-dd}_{type}.txt",
                                 FileMode.Append, FileAccess.ReadWrite))
                         {
                             using (var writer = new StreamWriter(file))
@@ -49,20 +49,20 @@ namespace URLShortener.Tools
         /// объект блокировки
         /// </summary>
         private static readonly object LockObject = new object();
+    }
 
+    /// <summary>
+    /// Тип ошибок
+    /// </summary>
+    public enum ErrorType
+    {
         /// <summary>
-        /// Тип ошибок
+        /// Критическая
         /// </summary>
-        public enum ErrorType
-        {
-            /// <summary>
-            /// Критическая
-            /// </summary>
-            Critical,
-            /// <summary>
-            /// Второстепенная, например, не передались cookie
-            /// </summary>
-            Regular
-        }
+        Critical,
+        /// <summary>
+        /// Второстепенная, например, не передались cookie
+        /// </summary>
+        Regular
     }
 }
