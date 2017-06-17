@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище UrlShortenerBaseModel" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Links">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Url" Type="nvarchar" MaxLength="850" Nullable="false" />
+          <Property Name="CreationDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="Follows" Type="bigint" Nullable="false" />
+          <Property Name="ShortUrl" Type="nvarchar" MaxLength="6" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TokenMapping">
+          <Key>
+            <PropertyRef Name="LinkId" />
+            <PropertyRef Name="TokenId" />
+          </Key>
+          <Property Name="LinkId" Type="int" Nullable="false" />
+          <Property Name="TokenId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tokens">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Token" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Links">
+          <End Role="Links" Type="Self.Links" Multiplicity="1" />
+          <End Role="TokenMapping" Type="Self.TokenMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Links">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TokenMapping">
+              <PropertyRef Name="LinkId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tokens">
+          <End Role="Tokens" Type="Self.Tokens" Multiplicity="1" />
+          <End Role="TokenMapping" Type="Self.TokenMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tokens">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TokenMapping">
+              <PropertyRef Name="TokenId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище UrlShortenerBaseModelContainer">
+          <EntitySet Name="Links" EntityType="Self.Links" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TokenMapping" EntityType="Self.TokenMapping" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tokens" EntityType="Self.Tokens" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Links" Association="Self.FK_Links">
+            <End Role="Links" EntitySet="Links" />
+            <End Role="TokenMapping" EntitySet="TokenMapping" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tokens" Association="Self.FK_Tokens">
+            <End Role="Tokens" EntitySet="Tokens" />
+            <End Role="TokenMapping" EntitySet="TokenMapping" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="UrlShortenerBaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Links">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Url" Type="String" MaxLength="850" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="Follows" Type="Int64" Nullable="false" />
+          <Property Name="ShortUrl" Type="String" MaxLength="6" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Tokens" Relationship="Self.TokenMapping" FromRole="Links" ToRole="Tokens" />
+        </EntityType>
+        <EntityType Name="Tokens">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Token" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Links" Relationship="Self.TokenMapping" FromRole="Tokens" ToRole="Links" />
+        </EntityType>
+        <Association Name="TokenMapping">
+          <End Role="Links" Type="Self.Links" Multiplicity="*" />
+          <End Role="Tokens" Type="Self.Tokens" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="UrlShortenerBaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Links" EntityType="Self.Links" />
+          <EntitySet Name="Tokens" EntityType="Self.Tokens" />
+          <AssociationSet Name="TokenMapping" Association="Self.TokenMapping">
+            <End Role="Links" EntitySet="Links" />
+            <End Role="Tokens" EntitySet="Tokens" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище UrlShortenerBaseModelContainer" CdmEntityContainer="UrlShortenerBaseEntities">
+          <EntitySetMapping Name="Links">
+            <EntityTypeMapping TypeName="UrlShortenerBaseModel.Links">
+              <MappingFragment StoreEntitySet="Links">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="Follows" ColumnName="Follows" />
+                <ScalarProperty Name="ShortUrl" ColumnName="ShortUrl" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tokens">
+            <EntityTypeMapping TypeName="UrlShortenerBaseModel.Tokens">
+              <MappingFragment StoreEntitySet="Tokens">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="TokenMapping" TypeName="UrlShortenerBaseModel.TokenMapping" StoreEntitySet="TokenMapping">
+            <EndProperty Name="Links">
+              <ScalarProperty Name="Id" ColumnName="LinkId" />
+            </EndProperty>
+            <EndProperty Name="Tokens">
+              <ScalarProperty Name="Id" ColumnName="TokenId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
