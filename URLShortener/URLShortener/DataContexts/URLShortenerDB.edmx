@@ -17,11 +17,11 @@
         </EntityType>
         <EntityType Name="TokenMapping">
           <Key>
-            <PropertyRef Name="LinkId" />
-            <PropertyRef Name="TokenId" />
+            <PropertyRef Name="MapId" />
           </Key>
           <Property Name="LinkId" Type="int" Nullable="false" />
           <Property Name="TokenId" Type="int" Nullable="false" />
+          <Property Name="MapId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="Tokens">
           <Key>
@@ -81,7 +81,17 @@
           <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="Follows" Type="Int64" Nullable="false" />
           <Property Name="ShortUrl" Type="String" MaxLength="6" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Tokens" Relationship="Self.TokenMapping" FromRole="Links" ToRole="Tokens" />
+          <NavigationProperty Name="TokenMapping" Relationship="Self.FK_Links" FromRole="Links" ToRole="TokenMapping" />
+        </EntityType>
+        <EntityType Name="TokenMapping">
+          <Key>
+            <PropertyRef Name="MapId" />
+          </Key>
+          <Property Name="LinkId" Type="Int32" Nullable="false" />
+          <Property Name="TokenId" Type="Int32" Nullable="false" />
+          <Property Name="MapId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Links" Relationship="Self.FK_Links" FromRole="TokenMapping" ToRole="Links" />
+          <NavigationProperty Name="Tokens" Relationship="Self.FK_Tokens" FromRole="TokenMapping" ToRole="Tokens" />
         </EntityType>
         <EntityType Name="Tokens">
           <Key>
@@ -89,18 +99,43 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Token" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Links" Relationship="Self.TokenMapping" FromRole="Tokens" ToRole="Links" />
+          <NavigationProperty Name="TokenMapping" Relationship="Self.FK_Tokens" FromRole="Tokens" ToRole="TokenMapping" />
         </EntityType>
-        <Association Name="TokenMapping">
-          <End Role="Links" Type="Self.Links" Multiplicity="*" />
-          <End Role="Tokens" Type="Self.Tokens" Multiplicity="*" />
+        <Association Name="FK_Links">
+          <End Role="Links" Type="Self.Links" Multiplicity="1" />
+          <End Role="TokenMapping" Type="Self.TokenMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Links">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TokenMapping">
+              <PropertyRef Name="LinkId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tokens">
+          <End Role="Tokens" Type="Self.Tokens" Multiplicity="1" />
+          <End Role="TokenMapping" Type="Self.TokenMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tokens">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TokenMapping">
+              <PropertyRef Name="TokenId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <EntityContainer Name="UrlShortenerBaseEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Links" EntityType="Self.Links" />
+          <EntitySet Name="TokenMapping" EntityType="Self.TokenMapping" />
           <EntitySet Name="Tokens" EntityType="Self.Tokens" />
-          <AssociationSet Name="TokenMapping" Association="Self.TokenMapping">
+          <AssociationSet Name="FK_Links" Association="Self.FK_Links">
             <End Role="Links" EntitySet="Links" />
+            <End Role="TokenMapping" EntitySet="TokenMapping" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tokens" Association="Self.FK_Tokens">
             <End Role="Tokens" EntitySet="Tokens" />
+            <End Role="TokenMapping" EntitySet="TokenMapping" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -120,6 +155,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="TokenMapping">
+            <EntityTypeMapping TypeName="UrlShortenerBaseModel.TokenMapping">
+              <MappingFragment StoreEntitySet="TokenMapping">
+                <ScalarProperty Name="LinkId" ColumnName="LinkId" />
+                <ScalarProperty Name="TokenId" ColumnName="TokenId" />
+                <ScalarProperty Name="MapId" ColumnName="MapId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Tokens">
             <EntityTypeMapping TypeName="UrlShortenerBaseModel.Tokens">
               <MappingFragment StoreEntitySet="Tokens">
@@ -128,14 +172,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="TokenMapping" TypeName="UrlShortenerBaseModel.TokenMapping" StoreEntitySet="TokenMapping">
-            <EndProperty Name="Links">
-              <ScalarProperty Name="Id" ColumnName="LinkId" />
-            </EndProperty>
-            <EndProperty Name="Tokens">
-              <ScalarProperty Name="Id" ColumnName="TokenId" />
-            </EndProperty>
-          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

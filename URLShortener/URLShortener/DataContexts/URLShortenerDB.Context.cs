@@ -26,6 +26,7 @@ namespace URLShortener.DataContexts
         }
     
         public DbSet<Links> Links { get; set; }
+        public DbSet<TokenMapping> TokenMapping { get; set; }
         public DbSet<Tokens> Tokens { get; set; }
     }
 }

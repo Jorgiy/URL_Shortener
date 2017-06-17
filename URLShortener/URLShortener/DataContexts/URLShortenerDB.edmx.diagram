@@ -4,10 +4,12 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="abe94934a3e44c3493b59d7b42f80e3b" Name="Diagram1">
+      <Diagram DiagramId="39399e40ef984fe88f62021ab26ddf95" Name="Diagram1">
         <EntityTypeShape EntityType="UrlShortenerBaseModel.Links" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="UrlShortenerBaseModel.Tokens" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
-        <AssociationConnector Association="UrlShortenerBaseModel.TokenMapping" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="UrlShortenerBaseModel.TokenMapping" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="UrlShortenerBaseModel.Tokens" Width="1.5" PointX="0.75" PointY="5.25" IsExpanded="true" />
+        <AssociationConnector Association="UrlShortenerBaseModel.FK_Links" ManuallyRouted="false" />
+        <AssociationConnector Association="UrlShortenerBaseModel.FK_Tokens" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -12,19 +12,13 @@ namespace URLShortener.DataContexts
     using System;
     using System.Collections.Generic;
     
-    public partial class Links
+    public partial class TokenMapping
     {
-        public Links()
-        {
-            this.TokenMapping = new HashSet<TokenMapping>();
-        }
+        public int LinkId { get; set; }
+        public int TokenId { get; set; }
+        public long MapId { get; set; }
     
-        public int Id { get; set; }
-        public string Url { get; set; }
-        public System.DateTime CreationDate { get; set; }
-        public long Follows { get; set; }
-        public string ShortUrl { get; set; }
-    
-        public virtual ICollection<TokenMapping> TokenMapping { get; set; }
+        public virtual Links Links { get; set; }
+        public virtual Tokens Tokens { get; set; }
     }
 }

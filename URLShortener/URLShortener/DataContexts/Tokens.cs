@@ -16,12 +16,12 @@ namespace URLShortener.DataContexts
     {
         public Tokens()
         {
-            this.Links = new HashSet<Links>();
+            this.TokenMapping = new HashSet<TokenMapping>();
         }
     
         public int Id { get; set; }
         public string Token { get; set; }
     
-        public virtual ICollection<Links> Links { get; set; }
+        public virtual ICollection<TokenMapping> TokenMapping { get; set; }
     }
 }

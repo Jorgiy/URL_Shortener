@@ -151,25 +151,28 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DataContexts\Links.cs">
-      <DependentUpon>URLShortenerBase.tt</DependentUpon>
+      <DependentUpon>URLShortenerDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataContexts\TokenMapping.cs">
+      <DependentUpon>URLShortenerDB.tt</DependentUpon>
     </Compile>
     <Compile Include="DataContexts\Tokens.cs">
-      <DependentUpon>URLShortenerBase.tt</DependentUpon>
+      <DependentUpon>URLShortenerDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataContexts\URLShortenerBase.Context.cs">
+    <Compile Include="DataContexts\URLShortenerDB.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>URLShortenerBase.Context.tt</DependentUpon>
+      <DependentUpon>URLShortenerDB.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataContexts\URLShortenerBase.cs">
+    <Compile Include="DataContexts\URLShortenerDB.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>URLShortenerBase.tt</DependentUpon>
+      <DependentUpon>URLShortenerDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataContexts\URLShortenerBase.Designer.cs">
+    <Compile Include="DataContexts\URLShortenerDB.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>URLShortenerBase.edmx</DependentUpon>
+      <DependentUpon>URLShortenerDB.edmx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -179,15 +182,15 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="DataContexts\URLShortenerBase.Context.tt">
+    <Content Include="DataContexts\URLShortenerDB.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>URLShortenerBase.Context.cs</LastGenOutput>
-      <DependentUpon>URLShortenerBase.edmx</DependentUpon>
+      <DependentUpon>URLShortenerDB.edmx</DependentUpon>
+      <LastGenOutput>URLShortenerDB.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="DataContexts\URLShortenerBase.tt">
+    <Content Include="DataContexts\URLShortenerDB.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>URLShortenerBase.edmx</DependentUpon>
-      <LastGenOutput>URLShortenerBase.cs</LastGenOutput>
+      <DependentUpon>URLShortenerDB.edmx</DependentUpon>
+      <LastGenOutput>URLShortenerDB.cs</LastGenOutput>
     </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -198,12 +201,12 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <EntityDeploy Include="DataContexts\URLShortenerBase.edmx">
+    <EntityDeploy Include="DataContexts\URLShortenerDB.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>URLShortenerBase.Designer.cs</LastGenOutput>
+      <LastGenOutput>URLShortenerDB.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="DataContexts\URLShortenerBase.edmx.diagram">
-      <DependentUpon>URLShortenerBase.edmx</DependentUpon>
+    <Content Include="DataContexts\URLShortenerDB.edmx.diagram">
+      <DependentUpon>URLShortenerDB.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

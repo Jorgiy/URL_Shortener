@@ -1,4 +1,4 @@
-﻿// Создание кода T4 для модели "D:\URL_Shortener\URLShortener\URLShortener\DataContexts\URLShortenerBase.edmx" включено. 
+﻿// Создание кода T4 для модели "D:\URL_Shortener\URLShortener\URLShortener\DataContexts\URLShortenerDB.edmx" включено. 
 // Чтобы включить формирование кода прежних версий, измените значение свойства "Стратегия создания кода" конструктора
 // на "Legacy ObjectContext". Это свойство доступно в окне "Свойства", если модель
 // открыта в конструкторе.
