@@ -62,7 +62,11 @@ namespace URLShortener.Services
             }
             catch (Exception exc)
             {
-                throw new BuisenessException("Ошибка на стороне базы данных", exc) {ErrorLevel = ErrorType.Critical};
+                throw new BuisenessException(
+                    "Ошибка на стороне базы данных при попытке отображения ссылок пользователя.", exc)
+                {
+                    ErrorLevel = ErrorType.Critical
+                };
             }
         }
 
