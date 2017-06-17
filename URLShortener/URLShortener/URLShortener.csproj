@@ -190,6 +190,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="DataContexts\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
