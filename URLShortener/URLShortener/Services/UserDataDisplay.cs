@@ -26,38 +26,34 @@ namespace URLShortener.Services
                     return
                         new List<IDisplayedLink>(db.TokenMapping.Include("Tokens")
                             .Include("Links")
-                            .Where(c => c.Tokens.Token == token && c.Links.Id == c.LinkId)
+                            .Where(c => c.Tokens.Token == token)
                             .OrderBy(fields => SortColumnChoise(sortCol, fields))
-                            .Select(page => page.Links)
-                            .ToList()
-                            .Select(
-                                links =>
-                                    new DisplayedLink()
-                                    {
-                                        OriginalLink = links.Url,
-                                        CreationDate = links.CreationDate,
-                                        Follows = links.Follows,
-                                        ShortedLink = links.ShortUrl
-                                    }).ToList().GetRange((pageNumber - 1) * pageSize, pageSize));
+                            .Skip((pageNumber - 1) * pageSize)
+                            .Take(pageSize)
+                            .Select(page => new DisplayedLink()
+                            {
+                                CreationDate = page.Links.CreationDate,
+                                Follows = page.Links.Follows,
+                                OriginalLink = page.Links.Url,
+                                ShortedLink = page.Links.ShortUrl
+                            }).ToList());
                 }
                 else
                 {
                     return
                         new List<IDisplayedLink>(db.TokenMapping.Include("Tokens")
                             .Include("Links")
-                            .Where(c => c.Tokens.Token == token && c.Links.Id == c.LinkId)
+                            .Where(c => c.Tokens.Token == token)
                             .OrderByDescending(fields => SortColumnChoise(sortCol, fields))
-                            .Select(page => page.Links)
-                            .ToList()
-                            .Select(
-                                links =>
-                                    new DisplayedLink()
-                                    {
-                                        OriginalLink = links.Url,
-                                        CreationDate = links.CreationDate,
-                                        Follows = links.Follows,
-                                        ShortedLink = links.ShortUrl
-                                    }).ToList().GetRange((pageNumber - 1) * pageSize, pageSize));
+                            .Skip((pageNumber - 1) * pageSize)
+                            .Take(pageSize)
+                            .Select(page => new DisplayedLink()
+                            {
+                                CreationDate = page.Links.CreationDate,
+                                Follows = page.Links.Follows,
+                                OriginalLink = page.Links.Url,
+                                ShortedLink = page.Links.ShortUrl
+                            }).ToList());
                 }
             }
             catch (Exception exc)
