@@ -9,6 +9,7 @@ using URLShortener.Converters;
 using URLShortener.DataContexts;
 using URLShortener.Interfaces;
 using URLShortener.Tools;
+using static URLShortener.Tools.Sequences.SequencesTypes;
 
 namespace URLShortener.Services
 {
@@ -51,23 +52,8 @@ namespace URLShortener.Services
 
                 try
                 {
-                    int nextUrlId;
-
-                    using (
-                        var connection =
-                            new SqlConnection(
-                                ConfigurationManager.ConnectionStrings["UrlShortenerBaseEntities"].ConnectionString))
-                    {
-                        connection.Open();
-                        using (var command = new SqlCommand("SELECT NEXT VALUE FOR [dbo].[NextUrlId]"))
-                        {
-                            command.Connection = connection;
-                            var reader = command.ExecuteReader();
-                            nextUrlId = reader.GetInt32(0);
-                        }
-                        connection.Close();
-                    }
-
+                    var nextUrlId = Tools.Sequences.GetNewId(NextUrlId);
+                    
                     if (nextUrlId <= 0)
                         throw new BuisenessException(
                             $"Последовательность выдала id для новой ссылки = {nextUrlId} при попытке создать ссылку.",

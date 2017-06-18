@@ -17,14 +17,6 @@ namespace URLShortener.Interfaces
         /// <param name="linkId">ссылка для привязки токена</param>
         /// <returns>результат создания связки токена в хранилище данных</returns>
         ITokenCreationResult CreateToken(int linkId);
-
-        /// <summary>
-        /// Выдаёт токен пользователю в cookies
-        /// </summary>
-        /// <param name="token">сам токен</param>
-        /// <param name="tokenId">айди токена в базе, для его удаления в случае сетевой ошибки с cookies</param>
-        /// <returns>успешно или не успешно отправлен токен пользователю</returns>
-        bool AssignTokenToUser(Guid token, int tokenId);
     }
 
     /// <summary>
@@ -35,13 +27,13 @@ namespace URLShortener.Interfaces
         /// <summary>
         /// Выданный Cookie
         /// </summary>
-        Guid Cookie { get; set; }
+        string Cookie { get; set; }
         /// <summary>
         /// Айди cookie в базе
         /// </summary>
         int TokenId { get; set; }
         /// <summary>
-        /// Результат, говорящий о том, что и базе и у пользователя есть токен
+        /// Результат, говорящий о том, что в базе токен связан с ссылкой
         /// </summary>
         bool Success { get; set; }
         /// <summary>
