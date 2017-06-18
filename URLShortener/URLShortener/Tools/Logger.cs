@@ -33,7 +33,7 @@ namespace URLShortener.Tools
                             using (var writer = new StreamWriter(file))
                             {
                                 writer.Write(
-                                    $"{errorDateTime.Hour}:{errorDateTime.Minute}:{errorDateTime.Second} {text}\n");
+                                    $"{errorDateTime.Hour}:{errorDateTime.Minute}:{errorDateTime.Second} {text ?? String.Empty}\n");
                             }
                         }
                     }

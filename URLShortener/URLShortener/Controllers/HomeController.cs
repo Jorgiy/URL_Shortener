@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using URLShortener.Interfaces;
 using URLShortener.Models;
 using URLShortener.Services;
+using URLShortener.Tools;
 
 namespace URLShortener.Controllers
 {
@@ -40,9 +41,13 @@ namespace URLShortener.Controllers
         [HttpPost]
         public ActionResult Index(CreationLinkResultModel model)
         {
-            if (model.TokenSuccess)
+            if (model.TokenCreated)
             {
-                var cookies = new HttpCookie("TokenCookie") {["token"] = model.Token, Expires = DateTime.Now.AddYears(1)};
+                var cookies = new HttpCookie("URLShortenerTokenCookie")
+                {
+                    ["token"] = model.Token,
+                    Expires = DateTime.Now.AddYears(1)
+                };
                 Response.Cookies.Add(cookies);
             }
 
@@ -57,7 +62,36 @@ namespace URLShortener.Controllers
         [HttpPost]
         public JsonResult CreateShortLink(string url)
         {
-            
+            try
+            {
+                var creationResult = _linkOperator.CreateLink(url);
+                if (!creationResult.Success)
+                {
+                    return new JsonResult
+                    {
+                        Data = new CreationLinkResultModel() { Success = false, ErrorMessage = creationResult.ErrorMessage }
+                    };
+                }
+
+                var tokenResult = _tokenOperations.CreateToken(creationResult.LinkId,
+                    Request.Cookies["URLShortenerTokenCookie"]?["token"]);
+            }
+            catch (BuisenessException buisExc)
+            {
+                Logger.LogAsync(buisExc.ErrorLevel, buisExc.Message, DateTime.Now);
+                return new JsonResult
+                {
+                    Data = new CreationLinkResultModel() {Success = false, ErrorMessage = "Произошла ошибка"}
+                };
+            }
+            catch (Exception exc)
+            {
+                Logger.LogAsync(ErrorType.Critical, exc.Message, DateTime.Now);
+                return new JsonResult
+                {
+                    Data = new CreationLinkResultModel() { Success = false, ErrorMessage = "Произошла ошибка" }
+                };
+            }
         }
 
         /// <summary>
