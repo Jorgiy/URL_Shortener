@@ -15,7 +15,7 @@ namespace URLShortener.Converters
         /// </summary>
         /// <param name="input">число для преобразования</param>
         /// <returns>результат конвертации</returns>
-        public static string ConvertFrom10To36(uint input)
+        public static string ConvertFrom10To36(int input)
         {
             return Convert.ToString(input, 36);
         }
