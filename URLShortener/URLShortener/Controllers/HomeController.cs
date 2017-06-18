@@ -75,6 +75,20 @@ namespace URLShortener.Controllers
 
                 var tokenResult = _tokenOperations.CreateToken(creationResult.LinkId,
                     Request.Cookies["URLShortenerTokenCookie"]?["token"]);
+
+                return new JsonResult
+                {
+                    Data =
+                        new CreationLinkResultModel()
+                        {
+                            Success = true,
+                            ErrorMessage = tokenResult.ErrorMessage,
+                            ShortUrl = creationResult.ShortLink,
+                            Token = tokenResult.Cookie,
+                            TokenCreated = tokenResult.NewToken,
+                            Url = url
+                        }
+                };
             }
             catch (BuisenessException buisExc)
             {
@@ -99,9 +113,12 @@ namespace URLShortener.Controllers
         /// </summary>
         /// <param name="shorturl"></param>
         /// <returns></returns>
+        [Route("{url}")]
         public RedirectResult RedirectToUrl(string shorturl)
         {
-            
+            var originalLink = _linkOperator.ReturnOriginalLink(shorturl);
+
+            return originalLink == null ? Redirect($"~/{shorturl}") : new RedirectResult(originalLink);
         }
     }
 }

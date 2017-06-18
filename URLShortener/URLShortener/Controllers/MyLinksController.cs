@@ -4,12 +4,24 @@ using System.Linq;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
+using URLShortener.Interfaces;
 using URLShortener.Services;
+using URLShortener.Tools;
 
 namespace URLShortener.Controllers
 {
     public class MyLinksController : Controller
     {
+        public MyLinksController()
+        {
+            _userDataDisplay = new UserDataDisplay();
+        }
+
+        /// <summary>
+        /// сервис для отображения данных для пользователя
+        /// </summary>
+        private readonly IUserDataDisplay _userDataDisplay;
+
         /// <summary>
         /// Метод для отображения ссылок пользователя
         /// </summary>
@@ -22,6 +34,23 @@ namespace URLShortener.Controllers
             UserDataDisplay.SortCpoumnTypes sortcolumn = UserDataDisplay.SortCpoumnTypes.CreatioDate,
             SortDirection direction = SortDirection.Ascending)
         {
+            try
+            {
+                return
+                    View(_userDataDisplay.GetUserPaginatedLinks(Request.Cookies["URLShortenerTokenCookie"]?["token"],
+                        pagesize, direction, (int)sortcolumn, pagenumber));
+            }
+            catch (BuisenessException buisExc)
+            {
+                Logger.LogAsync(buisExc.ErrorLevel, buisExc.Message, DateTime.Now);
+                ViewBag.ErrorMessage = "При загрузке \"Моих ссылок\" произошла ошибка";
+            }
+            catch (Exception exc)
+            {
+                Logger.LogAsync(ErrorType.Critical, exc.Message, DateTime.Now);
+                ViewBag.ErrorMessage = "При загрузке \"Моих ссылок\" произошла ошибка";
+            }
+
             return View();
         }
     }
