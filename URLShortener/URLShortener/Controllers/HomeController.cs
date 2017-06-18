@@ -3,28 +3,66 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using URLShortener.Interfaces;
+using URLShortener.Models;
+using URLShortener.Services;
 
 namespace URLShortener.Controllers
 {
     public class HomeController : Controller
     {
+        public HomeController()
+        {
+            // DI руками, не все хостинги поддерживают ASP.NET Core
+            _linkOperator = new LinkOperator();
+            _tokenOperations = new TokenOperations();
+        }
+
+        /// <summary>
+        /// сервис по созданию ссылок
+        /// </summary>
+        private readonly ILinkOperator _linkOperator;
+        /// <summary>
+        /// сервис для определения связи "пользователь - ссылка"
+        /// </summary>
+        private readonly ITokenOperaions _tokenOperations;
+
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult About()
+        /// <summary>
+        /// Метод для загрузки страницы после попытки создания ссылки
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Index(CreationLinkResultModel model)
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
+            
+            return View(model);
         }
 
-        public ActionResult Contact()
+        /// <summary>
+        /// Поптка создать ссылку
+        /// </summary>
+        /// <param name="url">исходная ссылка</param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult CreateShortLink(string url)
         {
-            ViewBag.Message = "Your contact page.";
+            
+        }
 
-            return View();
+        /// <summary>
+        /// метод для перехода по укороченной ссылке
+        /// </summary>
+        /// <param name="shorturl"></param>
+        /// <returns></returns>
+        public RedirectResult RedirectToUrl(string shorturl)
+        {
+            
         }
     }
 }

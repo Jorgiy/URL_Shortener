@@ -144,6 +144,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\MyLinksController.cs" />
     <Compile Include="Converters\BaseConverter.cs" />
     <Compile Include="Converters\CongruentMethod.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -180,6 +181,7 @@
     <Compile Include="Interfaces\ILinkOperator.cs" />
     <Compile Include="Interfaces\ITokenOperaions.cs" />
     <Compile Include="Interfaces\IUserDataDisplay.cs" />
+    <Compile Include="Models\CreationLinkResultModel.cs" />
     <Compile Include="Models\DisplayedLink.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\LinkOperator.cs" />
@@ -241,12 +243,11 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\MyLinks\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
