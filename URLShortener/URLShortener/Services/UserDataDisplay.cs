@@ -17,7 +17,9 @@ namespace URLShortener.Services
             if (token == null) return new List<IDisplayedLink>();
             
             var db = new UrlShortenerBaseEntities();
-            var sortCol = (SortCpoumnTypes) sortColumn;
+            var sortCol = Enum.IsDefined(typeof(SortCpoumnTypes), sortColumn)
+                ? (SortCpoumnTypes) sortColumn
+                : SortCpoumnTypes.CreatioDate;
 
             try
             {
@@ -88,28 +90,28 @@ namespace URLShortener.Services
                     return input.Links.CreationDate;
             }
         }
-    }
 
-    /// <summary>
-    /// Колонки для сортировки
-    /// </summary>
-    public enum SortCpoumnTypes : int
-    {
         /// <summary>
-        /// Оригинальная ссылка
+        /// Колонки для сортировки
         /// </summary>
-        OriginalLink,
-        /// <summary>
-        /// укороченная ссылка
-        /// </summary>
-        ShortedLink,
-        /// <summary>
-        /// дата создания
-        /// </summary>
-        CreatioDate,
-        /// <summary>
-        /// количестов переходдов по ссылке
-        /// </summary>
-        Follows
+        public enum SortCpoumnTypes : int
+        {
+            /// <summary>
+            /// Оригинальная ссылка
+            /// </summary>
+            OriginalLink,
+            /// <summary>
+            /// укороченная ссылка
+            /// </summary>
+            ShortedLink,
+            /// <summary>
+            /// дата создания
+            /// </summary>
+            CreatioDate,
+            /// <summary>
+            /// количестов переходдов по ссылке
+            /// </summary>
+            Follows
+        }
     }
 }
