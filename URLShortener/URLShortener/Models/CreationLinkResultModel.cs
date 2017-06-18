@@ -36,8 +36,8 @@ namespace URLShortener.Models
         public string Token { get; set; }
 
         /// <summary>
-        /// успешно ли создан токен
+        /// создан ли токен
         /// </summary>
-        public bool TokenSuccess { get; set; }
+        public bool TokenCreated { get; set; }
     }
 }

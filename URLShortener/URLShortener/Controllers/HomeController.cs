@@ -40,7 +40,12 @@ namespace URLShortener.Controllers
         [HttpPost]
         public ActionResult Index(CreationLinkResultModel model)
         {
-            
+            if (model.TokenSuccess)
+            {
+                var cookies = new HttpCookie("TokenCookie") {["token"] = model.Token, Expires = DateTime.Now.AddYears(1)};
+                Response.Cookies.Add(cookies);
+            }
+
             return View(model);
         }
 

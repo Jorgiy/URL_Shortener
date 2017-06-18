@@ -15,8 +15,9 @@ namespace URLShortener.Interfaces
         /// Метод создающий токен и его связку с ссылкой
         /// </summary>
         /// <param name="linkId">ссылка для привязки токена</param>
+        /// <param name="token">если у пользователя есть токен</param>
         /// <returns>результат создания связки токена в хранилище данных</returns>
-        ITokenCreationResult CreateToken(int linkId);
+        ITokenCreationResult CreateToken(int linkId, string token);
     }
 
     /// <summary>
@@ -36,6 +37,10 @@ namespace URLShortener.Interfaces
         /// Результат, говорящий о том, что в базе токен связан с ссылкой
         /// </summary>
         bool Success { get; set; }
+        /// <summary>
+        /// Является ли токен созданным заново, или он старый
+        /// </summary>
+        bool NewToken { get; set; }
         /// <summary>
         /// Если была ошибка, то тут содержится её текст
         /// </summary>

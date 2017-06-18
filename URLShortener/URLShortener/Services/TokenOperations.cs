@@ -13,43 +13,60 @@ namespace URLShortener.Services
 {
     public class TokenOperations : ITokenOperaions
     {
-        public ITokenCreationResult CreateToken(int linkId)
+        public ITokenCreationResult CreateToken(int linkId, string token = null)
         {
-            int nextUserId;
-
-            try
-            {
-                nextUserId = Sequences.GetNewId(NextUserId);
-            }
-            catch (Exception seqEx)
-            {
-                Logger.LogAsync(ErrorType.Regular, $"Не удалось получить айди для нового токена. {seqEx.Message}",
-                    DateTime.Now);
-                return new TokenCreationResult()
-                {
-                    Success = false,
-                    ErrorMessage = "Произошла ошибка, ссылка не была добавлена в \"Мои ссылки\""
-                };
-            }
-            
             var db = new UrlShortenerBaseEntities();
-            var newGuid = Guid.NewGuid().ToString();
+            int nextUserId = 0;
+            string newGuid = null;
+            bool createdNewToken = true;
 
-            db.Tokens.Add(new Tokens {Id = nextUserId, Token = newGuid });
-
-            try
+            if (token != null) // если нам передали токен, то проверим, есть ли действительно такой в базе
             {
-                db.SaveChanges();
-            }
-            catch (Exception addTokenEx)
-            {
-                Logger.LogAsync(ErrorType.Regular, $"Не удалось вставить токен в таблицу токенов. {addTokenEx.Message}",
-                    DateTime.Now);
-                return new TokenCreationResult()
+                var existingToken = db.Tokens.FirstOrDefault(c => c.Token == token);
+                if (existingToken != null)
                 {
-                    Success = false,
-                    ErrorMessage = "Произошла ошибка, ссылка не была добавлена в \"Мои ссылки\""
-                };
+                    nextUserId = existingToken.Id;
+                    newGuid = existingToken.Token;
+                    createdNewToken = false;
+                }
+            }
+
+            if (newGuid == null) // если токен по прежнему не найден, то сгененрируем его
+            {
+                try
+                {
+                    nextUserId = Sequences.GetNewId(NextUserId);
+                }
+                catch (Exception seqEx)
+                {
+                    Logger.LogAsync(ErrorType.Regular, $"Не удалось получить айди для нового токена. {seqEx.Message}",
+                        DateTime.Now);
+                    return new TokenCreationResult()
+                    {
+                        Success = false,
+                        ErrorMessage = "Произошла ошибка, ссылка не была добавлена в \"Мои ссылки\""
+                    };
+                }
+
+                newGuid = Guid.NewGuid().ToString();
+
+                db.Tokens.Add(new Tokens {Id = nextUserId, Token = newGuid});
+
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (Exception addTokenEx)
+                {
+                    Logger.LogAsync(ErrorType.Regular,
+                        $"Не удалось вставить токен в таблицу токенов. {addTokenEx.Message}",
+                        DateTime.Now);
+                    return new TokenCreationResult()
+                    {
+                        Success = false,
+                        ErrorMessage = "Произошла ошибка, ссылка не была добавлена в \"Мои ссылки\""
+                    };
+                }
             }
 
             db.TokenMapping.Add(new TokenMapping() {LinkId = linkId, TokenId = nextUserId});
@@ -83,7 +100,13 @@ namespace URLShortener.Services
                 };
             }
 
-            return new TokenCreationResult() {TokenId = nextUserId, Cookie = newGuid, Success = true};
+            return new TokenCreationResult()
+            {
+                TokenId = nextUserId,
+                Cookie = newGuid,
+                Success = true,
+                NewToken = createdNewToken
+            };
         }
     }
 
@@ -93,5 +116,6 @@ namespace URLShortener.Services
         public int TokenId { get; set; }
         public bool Success { get; set; }
         public string ErrorMessage { get; set; }
+        public bool NewToken { get; set; }
     }
 }
