@@ -28,6 +28,7 @@ namespace URLShortener.Controllers
         /// </summary>
         private readonly ITokenOperaions _tokenOperations;
 
+        [Route("")]
         public ActionResult Index()
         {
             return View();
@@ -111,14 +112,21 @@ namespace URLShortener.Controllers
         /// <summary>
         /// метод для перехода по укороченной ссылке
         /// </summary>
-        /// <param name="shorturl"></param>
         /// <returns></returns>
         [Route("{url}")]
-        public RedirectResult RedirectToUrl(string shorturl)
+        public RedirectResult RedirectToUrl()
         {
+            var shorturl = Url.RequestContext.RouteData.Values["url"]?.ToString(); 
+
             var originalLink = _linkOperator.ReturnOriginalLink(shorturl);
 
-            return originalLink == null ? Redirect($"~/{shorturl}") : new RedirectResult(originalLink);
+            return originalLink == null ? Redirect($"~/Home/RedirectToUrl?errPage={shorturl}") : new RedirectResult(originalLink);
+        }
+
+        public ActionResult RedirectToUrl(string errPage)
+        {
+            ViewBag.Page = errPage;
+            return View();
         }
     }
 }
