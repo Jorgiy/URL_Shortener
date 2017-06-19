@@ -14,23 +14,23 @@
     <title>Show</title>
 </head>
 <body>
-<div class="container" id="page-content">
-<div class="row">
-    Список моих ссылок:
-</div>
-<div class="row">
-    @if (Model != null)
-    {
-        @Html.Grid(Model).Columns(columns =>
+    <div class="container" id="page-content">
+        <div class="row">
+            Список моих ссылок:
+        </div>
+        <div class="row">
+            @if (Model != null)
+            {
+                @Html.Grid(Model).Columns(columns =>
         {
             columns.Add(c => c.OriginalLink).Sortable(true);
         })
-    }
-    else
-    {
-        Html.Raw(ViewBag.ErrorMessage);
-    }
-</div>
+            }
+            else
+            {
+                Html.Raw(ViewBag.ErrorMessage);
+            }
+        </div>
     </div>
 </body>
 </html>
