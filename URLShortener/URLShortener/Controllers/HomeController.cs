@@ -114,19 +114,21 @@ namespace URLShortener.Controllers
         /// </summary>
         /// <returns></returns>
         [Route("{url}")]
-        public RedirectResult RedirectToUrl()
+        public ActionResult RedirectToUrl()
         {
             var shorturl = Url.RequestContext.RouteData.Values["url"]?.ToString(); 
 
             var originalLink = _linkOperator.ReturnOriginalLink(shorturl);
 
-            return originalLink == null ? Redirect($"~/Home/RedirectToUrl?errPage={shorturl}") : new RedirectResult(originalLink);
-        }
-
-        public ActionResult RedirectToUrl(string errPage)
-        {
-            ViewBag.Page = errPage;
-            return View();
+            if (originalLink == null)
+            {
+                ViewBag.Page = shorturl;
+                return View();
+            }
+            else
+            {
+                return new RedirectResult(originalLink);
+            }
         }
     }
 }
