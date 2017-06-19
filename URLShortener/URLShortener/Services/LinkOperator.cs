@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web;
 using URLShortener.Converters;
 using URLShortener.DataContexts;
@@ -16,9 +17,14 @@ namespace URLShortener.Services
     public class LinkOperator : ILinkOperator
     {
         /// <summary>
-        /// объект для блокировки
+        /// объект для блокировки вставки в базу
         /// </summary>
-        private static readonly object Lock = new object();
+        private static readonly object LockNewUrl = new object();
+
+        /// <summary>
+        /// объект для блокировки количества переходов по ссылке
+        /// </summary>
+        private static readonly object LockIncrementFollows = new object();
 
         public ILinkCreationResult CreateLink(string url)
         {
@@ -38,10 +44,10 @@ namespace URLShortener.Services
 
             var db = new UrlShortenerBaseEntities();
 
-            lock (Lock)
+            lock (LockNewUrl)
             {
                 var possibleShortUrl = db.Links.FirstOrDefault(c => c.Url == url.Replace(@"http://", String.Empty));
-                    // c http:// в базу не пишем
+                // c http:// в базу не пишем
                 if (possibleShortUrl != null)
                     return new LinkCreationResult()
                     {
@@ -53,7 +59,7 @@ namespace URLShortener.Services
                 try
                 {
                     var nextUrlId = Tools.Sequences.GetNewId(NextUrlId);
-                    
+
                     if (nextUrlId <= 0)
                         throw new BuisenessException(
                             $"Последовательность выдала id для новой ссылки = {nextUrlId} при попытке создать ссылку.",
@@ -91,6 +97,33 @@ namespace URLShortener.Services
         {
             var db = new UrlShortenerBaseEntities();
             return db.Links.FirstOrDefault(c => c.ShortUrl == shortenLink)?.Url;
+        }
+
+        public async void IncrementFollowsAsync(string shortenLink)
+        {
+            await Task.Run(() =>
+                {
+
+                    var db = new UrlShortenerBaseEntities();
+                    lock (LockIncrementFollows)
+                    {
+                        var link = db.Links.FirstOrDefault(c => c.ShortUrl == shortenLink);
+                        if (link == null) return;
+
+                        ++link.Follows;
+                        try
+                        {
+                            db.SaveChanges();
+                        }
+                        catch (Exception exc)
+                        {
+                            Logger.LogAsync(ErrorType.Regular,
+                                $"При попытке прибавить количество переходов по ссылке произошла ошибка {exc.Message}",
+                                DateTime.Now);
+                        }
+                    }
+                }
+            );
         }
     }
 

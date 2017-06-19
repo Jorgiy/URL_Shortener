@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,22 +49,22 @@ namespace URLShortener.Interfaces
         /// <summary>
         /// Оригинальная ссылка
         /// </summary>
-        [DisplayName("Оригинальная ссылка")]
+        [Display(Name = "Оригинальная ссылка")]
         string OriginalLink { get; set; }
         /// <summary>
         /// укороченная часть ссылки
         /// </summary>
-        [DisplayName("Укороченная ссылка")]
+        [Display(Name = "Укороченная ссылка")]
         string ShortedLink { get; set; }
         /// <summary>
         /// Дата создания ссылки
         /// </summary>
-        [DisplayName("Дата создания")]
+        [Display(Name = "Дата создания")]
         DateTime CreationDate { get; set; }
         /// <summary>
         /// Количество посещений
         /// </summary>
-        [DisplayName("Количество переходов")]
+        [Display(Name = "Количество переходов")]
         long Follows { get; set; }
     }
 }

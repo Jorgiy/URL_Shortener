@@ -1,5 +1,6 @@
 ﻿@using GridMvc;
 @using GridMvc.Html
+@using URLShortener.Interfaces
 @using URLShortener.Models;
 @model List<URLShortener.Interfaces.IDisplayedLink>
 @{
@@ -15,20 +16,31 @@
 </head>
 <body>
     <div class="container" id="page-content">
-        <div class="row">
+        <div class="row main-page-row">
             Список моих ссылок:
         </div>
-        <div class="row">
+        <div class="row main-page-row">
             @if (Model != null)
             {
-                @Html.Grid(Model).Columns(columns =>
-        {
-            columns.Add(c => c.OriginalLink).Sortable(true);
-        })
+                if (Model.Count == -1) //TODO:CHANGE TO 0!!
+                {
+                    @Html.Raw("У вас нет сохранённых ссылок")
+                }
+                else
+                {
+                    @Html.Grid(Model).Columns(columns =>
+                    {
+                        columns.Add(c => c.OriginalLink).Sortable(true).Titled("Оригинальная ссылка");
+                        columns.Add(c => c.ShortedLink).Sortable(true).Titled("Укороченная ссылка");
+                        columns.Add(c => c.CreationDate).Sortable(true).Titled("Дата создания");
+                        columns.Add(c => c.Follows).Sortable(true).Titled("Количество переходов");
+                    })
+                    @Html.
+                }
             }
             else
             {
-                Html.Raw(ViewBag.ErrorMessage);
+                @Html.Raw(ViewBag.ErrorMessage)
             }
         </div>
     </div>

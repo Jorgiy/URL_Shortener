@@ -45,9 +45,9 @@ namespace URLShortener.Controllers
                     Request.Cookies["URLShortenerTokenCookie"]?["token"],
                     pagesize, direction, (int) sortcolumn, pagenumber);
 
-                ViewBag.pages = result;
+                ViewBag.pages = result.Count;
 
-                return View(result);
+                return View(result.Links);
             }
             catch (BuisenessException buisExc)
             {

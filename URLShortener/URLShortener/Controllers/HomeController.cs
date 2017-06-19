@@ -127,6 +127,7 @@ namespace URLShortener.Controllers
             }
             else
             {
+                _linkOperator.IncrementFollowsAsync(shorturl);
                 return new RedirectResult(originalLink);
             }
         }

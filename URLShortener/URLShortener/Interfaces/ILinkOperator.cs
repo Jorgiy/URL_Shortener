@@ -24,6 +24,12 @@ namespace URLShortener.Interfaces
         /// <param name="shortenLink">укороченная ссылка</param>
         /// <returns>оригинальная ссылка</returns>
         string ReturnOriginalLink(string shortenLink);
+
+        /// <summary>
+        /// метод для подсчёта перехода по ссылкам
+        /// </summary>
+        /// <param name="shortenLink"></param>
+        void IncrementFollowsAsync(string shortenLink);
     }
 
     /// <summary>
