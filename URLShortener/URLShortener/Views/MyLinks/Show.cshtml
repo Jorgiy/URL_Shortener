@@ -1,5 +1,4 @@
-﻿@using GridMvc;
-@using GridMvc.Html
+﻿@using AspNet.Mvc.Grid
 @using URLShortener.Interfaces
 @using URLShortener.Models;
 @model List<URLShortener.Interfaces.IDisplayedLink>
@@ -30,12 +29,11 @@
                 {
                     @Html.Grid(Model).Columns(columns =>
                     {
-                        columns.Add(c => c.OriginalLink).Sortable(true).Titled("Оригинальная ссылка");
-                        columns.Add(c => c.ShortedLink).Sortable(true).Titled("Укороченная ссылка");
-                        columns.Add(c => c.CreationDate).Sortable(true).Titled("Дата создания");
-                        columns.Add(c => c.Follows).Sortable(true).Titled("Количество переходов");
+                        columns.For(c => c.OriginalLink).Sortable(true).Named("Оригинальная ссылка");
+                        columns.For(c => $"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Content("~")}{c.ShortedLink}").Sortable(true).Named("Укороченная ссылка");
+                        columns.For(c => c.CreationDate).Sortable(true).Named("Дата создания");
+                        columns.For(c => c.Follows).Sortable(true).Named("Количество переходов");
                     })
-                    @Html.
                 }
             }
             else
