@@ -36,9 +36,18 @@ namespace URLShortener.Controllers
         {
             try
             {
-                return
-                    View(_userDataDisplay.GetUserPaginatedLinks(Request.Cookies["URLShortenerTokenCookie"]?["token"],
-                        pagesize, direction, (int)sortcolumn, pagenumber));
+                ViewBag.pagesize = pagesize;
+                ViewBag.pagenumber = pagenumber;
+                ViewBag.sortcolumn = sortcolumn;
+                ViewBag.direction = direction;
+
+                var result = _userDataDisplay.GetUserPaginatedLinks(
+                    Request.Cookies["URLShortenerTokenCookie"]?["token"],
+                    pagesize, direction, (int) sortcolumn, pagenumber);
+
+                ViewBag.pages = result;
+
+                return View(result);
             }
             catch (BuisenessException buisExc)
             {

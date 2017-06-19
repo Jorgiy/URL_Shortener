@@ -12,9 +12,9 @@ namespace URLShortener.Services
 {
     public class UserDataDisplay : IUserDataDisplay
     {
-        public List<IDisplayedLink> GetUserPaginatedLinks(string token, int pageSize, SortDirection direction, int sortColumn, int pageNumber)
+        public IPaginatedLinksResult GetUserPaginatedLinks(string token, int pageSize, SortDirection direction, int sortColumn, int pageNumber)
         {
-            if (token == null) return new List<IDisplayedLink>();
+            if (token == null) return new PaginatedLinksResult { Count = 0, Links = new List<IDisplayedLink>()};
             
             var db = new UrlShortenerBaseEntities();
             var sortCol = Enum.IsDefined(typeof(SortCpoumnTypes), sortColumn)
@@ -23,9 +23,16 @@ namespace URLShortener.Services
 
             try
             {
+                var count = db.TokenMapping.Include("Tokens")
+                    .Include("Links")
+                    .Count(c => c.Tokens.Token == token);
+
                 if (direction == SortDirection.Ascending)
                 {
-                    return
+                    return new PaginatedLinksResult
+                    {
+                        Count = count,
+                        Links =
                         new List<IDisplayedLink>(db.TokenMapping.Include("Tokens")
                             .Include("Links")
                             .Where(c => c.Tokens.Token == token)
@@ -38,11 +45,15 @@ namespace URLShortener.Services
                                 Follows = page.Links.Follows,
                                 OriginalLink = page.Links.Url,
                                 ShortedLink = page.Links.ShortUrl
-                            }).ToList());
+                            }).ToList())
+                    };
                 }
                 else
                 {
-                    return
+                    return new PaginatedLinksResult
+                    {
+                        Count = count,
+                        Links =
                         new List<IDisplayedLink>(db.TokenMapping.Include("Tokens")
                             .Include("Links")
                             .Where(c => c.Tokens.Token == token)
@@ -55,7 +66,8 @@ namespace URLShortener.Services
                                 Follows = page.Links.Follows,
                                 OriginalLink = page.Links.Url,
                                 ShortedLink = page.Links.ShortUrl
-                            }).ToList());
+                            }).ToList())
+                    };
                 }
             }
             catch (Exception exc)

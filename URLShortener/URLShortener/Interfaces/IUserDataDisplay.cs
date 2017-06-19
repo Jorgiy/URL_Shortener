@@ -22,7 +22,22 @@ namespace URLShortener.Interfaces
         /// <param name="sortColumn">колонка по которой сортировать</param>
         /// <param name="pageNumber">номер страницы</param>
         /// <returns>пагинированные ссылки</returns>
-        List<IDisplayedLink> GetUserPaginatedLinks(string token, int pageSize, SortDirection direction, int sortColumn, int pageNumber);
+        IPaginatedLinksResult GetUserPaginatedLinks(string token, int pageSize, SortDirection direction, int sortColumn, int pageNumber);
+    }
+
+    /// <summary>
+    /// интерфейс для отображения пагинированных ссылок пользователя
+    /// </summary>
+    public interface IPaginatedLinksResult
+    {
+        /// <summary>
+        /// пагинированные ссылки
+        /// </summary>
+        List<IDisplayedLink> Links { get; set; }
+        /// <summary>
+        /// общее количество ссылок
+        /// </summary>
+        int Count { get; set; }
     }
 
     /// <summary>

@@ -14,4 +14,10 @@ namespace URLShortener.Models
         public DateTime CreationDate { get; set; }
         public long Follows { get; set; }
     }
+
+    public class PaginatedLinksResult : IPaginatedLinksResult
+    {
+        public List<IDisplayedLink> Links { get; set; }
+        public int Count { get; set; }
+    }
 }
