@@ -11,10 +11,26 @@
     <title>@ViewBag.Title</title>
 </head>
 <body>
-<div class="container">
-<div class="row">
-<div class="co"></div>
-</div>
+<div class="container" id="page-content">
+    <div class="row">
+        <div class="col-md-3">
+            Сделайте ссылки короче
+        </div>
+    </div>
+    <div class="row main-page-row">
+        <div class="col-md-12 col-lg-12 col-sm-12">
+            <div id="link-text-box">
+                <input type="text" id="text-box-input" placeholder="введите сюда ссылку"/>
+                <button id="copy-button">Копировать</button>
+            </div>
+        </div>
+        
+    </div>
+    <div class="row main-page-row">
+        <div class="col-md-12 col-lg-12 col-sm-12">
+            <button class="pull-left" id="shorten-button">Укоротить!</button>
+        </div>
+    </div>
 </div>
 </body>
 </html>
