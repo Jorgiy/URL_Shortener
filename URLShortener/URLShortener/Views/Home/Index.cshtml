@@ -31,14 +31,14 @@
                                                                                                 {
                                                                                                     @(Model.Success ? shortUrl : String.Empty)
                                                                                                 }">
-                <button id="copy-button" data-bind="click: copyTextToBuffer" style="@if (Model != null)
-                {
-                    @(Model.Success ? "visibility: visible" : "visibility: hidden")
-                }
-                else
-                {
-                    @("visibility: hidden")
-                }">Копировать</button>
+                <button id="copy-button" data-clipboard-target="#text-box-input" style="@if (Model != null)
+                                                                                                    {
+                                                                                                        @(Model.Success ? "visibility: visible" : "visibility: hidden")
+                                                                                                    }
+                                                                                                    else
+                                                                                                    {
+                                                                                                        @("visibility: visible")
+                                                                                                    }">Копировать</button>
             </div>
         </div>
     </div>
@@ -62,3 +62,6 @@
         </div>
     </div>
 </div>
+<script>
+    new Clipboard('#copy-button');
+</script>

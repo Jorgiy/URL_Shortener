@@ -9,10 +9,6 @@ function InitPage() {
 
         returnToMainLink: function() {
             
-        },
-
-        copyTextToBuffer : function() {
-            
         }
     }
 
