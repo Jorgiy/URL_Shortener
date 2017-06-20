@@ -5,17 +5,6 @@
     const string title = "Сделайте ссылки короче";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript" src="~/Scripts/knockout-3.4.2.js"></script>
-    <script type="text/javascript" src="~/Scripts/createlink.js"></script>
-    <title>@ViewBag.Title</title>
-</head>
-<body>
 <div class="container" id="page-content">
     @if (Model?.ErrorMessage != null)
     {
@@ -42,7 +31,7 @@
                                                                                                 {
                                                                                                     @(Model.Success ? shortUrl : String.Empty)
                                                                                                 }">
-                <button id="copy-button" style="@if (Model != null)
+                <button id="copy-button" data-bind="click: copyTextToBuffer" style="@if (Model != null)
                 {
                     @(Model.Success ? "visibility: visible" : "visibility: hidden")
                 }
@@ -59,19 +48,17 @@
             {
                 if (Model.Success)
                 {
-                    <button id="return-button">Вернуться на главную</button>
+                    <button id="return-button" data-bind="click: returnToMainLink">Вернуться на главную</button>
                 }
                 else
                 {
-                    <button id="shorten-button">Укоротить!</button>
+                    <button id="shorten-button" data-bind="click: shortLink">Укоротить!</button>
                 }
             }
             else
             {
-                <button id="shorten-button">Укоротить!</button>
+                <button id="shorten-button" data-bind="click: shortLink">Укоротить!</button>
             }
         </div>
     </div>
 </div>
-</body>
-</html>
