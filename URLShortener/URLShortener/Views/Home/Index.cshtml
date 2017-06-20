@@ -1,5 +1,8 @@
-﻿@{
+﻿@model URLShortener.Models.CreationLinkResultModel
+@{
     ViewBag.Title = "URL Shortener";
+    var shortUrl = $"{Request?.Url?.Scheme}://{Request?.Url?.Authority}{Url.Content("~")}{Model?.ShortUrl}";
+    const string title = "Сделайте ссылки короче";
 }
 
 <!DOCTYPE html>
@@ -8,27 +11,65 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="~/Scripts/knockout-3.4.2.js"></script>
+    <script type="text/javascript" src="~/Scripts/createlink.js"></script>
     <title>@ViewBag.Title</title>
 </head>
 <body>
 <div class="container" id="page-content">
+    @if (Model?.ErrorMessage != null)
+    {
+        <div class="row main-page-row error-row">
+            <div class="col-md-12 col-lg-12 col-sm-12">@Model.ErrorMessage</div>
+        </div>
+    }
     <div class="row">
         <div class="col-md-3">
-            Сделайте ссылки короче
+            @if (Model != null)
+            {
+                @(Model.Success ? $"Ссылка {Model.Url} была укорочена до:" : title)
+            }
+            else
+            {
+                @title
+            }
         </div>
     </div>
     <div class="row main-page-row">
         <div class="col-md-12 col-lg-12 col-sm-12">
             <div id="link-text-box">
-                <input type="text" id="text-box-input" placeholder="введите сюда ссылку"/>
-                <button id="copy-button">Копировать</button>
+                <input type="text" id="text-box-input" placeholder="введите сюда ссылку" value="@if (Model != null)
+                                                                                                {
+                                                                                                    @(Model.Success ? shortUrl : String.Empty)
+                                                                                                }">
+                <button id="copy-button" style="@if (Model != null)
+                {
+                    @(Model.Success ? "visibility: visible" : "visibility: hidden")
+                }
+                else
+                {
+                    @("visibility: hidden")
+                }">Копировать</button>
             </div>
         </div>
-        
     </div>
     <div class="row main-page-row">
         <div class="col-md-12 col-lg-12 col-sm-12">
-            <button class="pull-left" id="shorten-button">Укоротить!</button>
+            @if (Model != null)
+            {
+                if (Model.Success)
+                {
+                    <button id="return-button">Вернуться на главную</button>
+                }
+                else
+                {
+                    <button id="shorten-button">Укоротить!</button>
+                }
+            }
+            else
+            {
+                <button id="shorten-button">Укоротить!</button>
+            }
         </div>
     </div>
 </div>

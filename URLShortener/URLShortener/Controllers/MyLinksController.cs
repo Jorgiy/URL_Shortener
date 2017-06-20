@@ -47,15 +47,14 @@ namespace URLShortener.Controllers
                     Request.Cookies["URLShortenerTokenCookie"]?["token"],
                     pagesize, Direction, (int) Column, page);
 
-                ViewBag.pages = result.Count;
-
                 //TODO : DELETE!!
-                result.Links.Add(new DisplayedLink() { OriginalLink = "http://vk.com", ShortedLink = "fgi7ua", CreationDate = DateTime.Now, Follows = 4 });
-                result.Links.Add(new DisplayedLink() { OriginalLink = "http://ya.ru", ShortedLink = "fhi6ip", CreationDate = DateTime.Now, Follows = 100 });
-                result.Links.Add(new DisplayedLink() { OriginalLink = "http://vk.com", ShortedLink = "fgi7ua", CreationDate = DateTime.Now, Follows = 4 });
-                result.Links.Add(new DisplayedLink() { OriginalLink = "http://ya.ru", ShortedLink = "fhi6ip", CreationDate = DateTime.Now, Follows = 100 });
-                result.Links.Add(new DisplayedLink() { OriginalLink = "http://vk.com", ShortedLink = "fgi7ua", CreationDate = DateTime.Now, Follows = 4 });
-                result.Links.Add(new DisplayedLink() { OriginalLink = "http://ya.ru", ShortedLink = "fhi6ip", CreationDate = DateTime.Now, Follows = 100 });
+                var displayedLinks = result as IList<IDisplayedLink> ?? result.ToList();
+                displayedLinks.Add(new DisplayedLink() { OriginalLink = "http://vk.com", ShortedLink = "fgi7ua", CreationDate = DateTime.Now, Follows = 4 });
+                displayedLinks.Add(new DisplayedLink() { OriginalLink = "http://ya.ru", ShortedLink = "fhi6ip", CreationDate = DateTime.Now, Follows = 100 });
+                displayedLinks.Add(new DisplayedLink() { OriginalLink = "http://vk.com", ShortedLink = "fgi7ua", CreationDate = DateTime.Now, Follows = 4 });
+                displayedLinks.Add(new DisplayedLink() { OriginalLink = "http://ya.ru", ShortedLink = "fhi6ip", CreationDate = DateTime.Now, Follows = 100 });
+                displayedLinks.Add(new DisplayedLink() { OriginalLink = "http://vk.com", ShortedLink = "fgi7ua", CreationDate = DateTime.Now, Follows = 4 });
+                displayedLinks.Add(new DisplayedLink() { OriginalLink = "http://ya.ru", ShortedLink = "fhi6ip", CreationDate = DateTime.Now, Follows = 100 });
 
                 var sortOptions = new GridSortOptions
                 {
@@ -65,7 +64,7 @@ namespace URLShortener.Controllers
 
                 ViewData["sort"] = sortOptions;
 
-                return View(result.Links.AsPagination(page, pagesize));
+                return View(result.AsPagination(page, pagesize));
             }
             catch (BuisenessException buisExc)
             {

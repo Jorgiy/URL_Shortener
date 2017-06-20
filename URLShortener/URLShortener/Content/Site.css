@@ -35,7 +35,6 @@ textarea {
 #copy-button {
     border: 0;
     background: transparent;
-    visibility: hidden;
 }
 
 #text-box-input {
@@ -46,4 +45,8 @@ textarea {
 .main-page-row {
     margin-top: 1%;
     margin-bottom: 1%;
+}
+
+.error-row {
+    background-color: red;
 }

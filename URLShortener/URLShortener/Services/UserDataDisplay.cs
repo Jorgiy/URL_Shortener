@@ -13,9 +13,9 @@ namespace URLShortener.Services
 {
     public class UserDataDisplay : IUserDataDisplay
     {
-        public IPaginatedLinksResult GetUserPaginatedLinks(string token, int pageSize, SortDirection direction, int sortColumn, int pageNumber)
+        public IEnumerable<IDisplayedLink> GetUserPaginatedLinks(string token, int pageSize, SortDirection direction, int sortColumn, int pageNumber)
         {
-            if (token == null) return new PaginatedLinksResult { Count = 0, Links = new List<IDisplayedLink>()};
+            if (token == null) return new List<IDisplayedLink>();
             
             var db = new UrlShortenerBaseEntities();
             var sortCol = Enum.IsDefined(typeof(SortCpoumnTypes), sortColumn)
@@ -24,51 +24,37 @@ namespace URLShortener.Services
 
             try
             {
-                var count = db.TokenMapping.Include("Tokens")
-                    .Include("Links")
-                    .Count(c => c.Tokens.Token == token);
-
                 if (direction == SortDirection.Ascending)
                 {
-                    return new PaginatedLinksResult
-                    {
-                        Count = count,
-                        Links =
-                        new List<IDisplayedLink>(db.TokenMapping.Include("Tokens")
-                            .Include("Links")
-                            .Where(c => c.Tokens.Token == token)
-                            .OrderBy(fields => SortColumnChoise(sortCol, fields))
-                            .Skip((pageNumber - 1) * pageSize)
-                            .Take(pageSize)
-                            .Select(page => new DisplayedLink()
-                            {
-                                CreationDate = page.Links.CreationDate,
-                                Follows = page.Links.Follows,
-                                OriginalLink = page.Links.Url,
-                                ShortedLink = page.Links.ShortUrl
-                            }).ToList())
-                    };
+                    return db.TokenMapping.Include("Tokens")
+                        .Include("Links")
+                        .Where(c => c.Tokens.Token == token)
+                        .OrderBy(fields => SortColumnChoise(sortCol, fields))
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
+                        .Select(page => new DisplayedLink()
+                        {
+                            CreationDate = page.Links.CreationDate,
+                            Follows = page.Links.Follows,
+                            OriginalLink = page.Links.Url,
+                            ShortedLink = page.Links.ShortUrl
+                        });
                 }
                 else
                 {
-                    return new PaginatedLinksResult
-                    {
-                        Count = count,
-                        Links =
-                        new List<IDisplayedLink>(db.TokenMapping.Include("Tokens")
-                            .Include("Links")
-                            .Where(c => c.Tokens.Token == token)
-                            .OrderByDescending(fields => SortColumnChoise(sortCol, fields))
-                            .Skip((pageNumber - 1) * pageSize)
-                            .Take(pageSize)
-                            .Select(page => new DisplayedLink()
-                            {
-                                CreationDate = page.Links.CreationDate,
-                                Follows = page.Links.Follows,
-                                OriginalLink = page.Links.Url,
-                                ShortedLink = page.Links.ShortUrl
-                            }).ToList())
-                    };
+                    return db.TokenMapping.Include("Tokens")
+                        .Include("Links")
+                        .Where(c => c.Tokens.Token == token)
+                        .OrderBy(fields => SortColumnChoise(sortCol, fields))
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
+                        .Select(page => new DisplayedLink()
+                        {
+                            CreationDate = page.Links.CreationDate,
+                            Follows = page.Links.Follows,
+                            OriginalLink = page.Links.Url,
+                            ShortedLink = page.Links.ShortUrl
+                        });
                 }
             }
             catch (Exception exc)
@@ -138,11 +124,5 @@ namespace URLShortener.Services
         public DateTime CreationDate { get; set; }
         [Display(Name = "Количество переходов")]
         public long Follows { get; set; }
-    }
-
-    public class PaginatedLinksResult : IPaginatedLinksResult
-    {
-        public List<IDisplayedLink> Links { get; set; }
-        public int Count { get; set; }
     }
 }

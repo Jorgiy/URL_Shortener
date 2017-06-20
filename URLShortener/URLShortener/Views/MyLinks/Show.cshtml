@@ -1,9 +1,10 @@
 ﻿@using AspNet.Mvc.Grid
+@using AspNet.Mvc.Grid.Pagination;
 @using URLShortener.Interfaces
 @using URLShortener.Models;
 @using URLShortener.Services
 @using SortDirection = AspNet.Mvc.Grid.Sorting.SortDirection
-@model AspNet.Mvc.Grid.Pagination.IPagination<URLShortener.Interfaces.IDisplayedLink>
+@model IPagination<URLShortener.Interfaces.IDisplayedLink>
 @{
     ViewBag.Title = "Мои ссылки";
 }
@@ -21,28 +22,19 @@
             Список моих ссылок:
         </div>
         <div class="row main-page-row">
-            <div class="col-md-12 col-lg-12 col-sm-12">
-            @Html.Pager(Model).Format("Ссылки {0} - {1} из {2}").First("1").Last(ViewBag.pages.ToString()).Next("Следующая").Previous("Предыдущая")
-            </div>
+            @Html.Pager(Model).Format("Ссылки {0} - {1} из {2}").First(Model.FirstItem.ToString()).Last(Model.LastItem.ToString()).Next("Следующая").Previous("Предыдущая")
         </div>
         <div class="row main-page-row">
             @if (Model != null)
             {
-                if (!Model.Any())
-                {
-                    @Html.Raw("У вас нет сохранённых ссылок")
-                }
-                else
-                {
-                    @Html.Grid(Model).Sort(ViewData["sort"] as GridSortOptions).Columns(columns =>
+                @Html.Grid(Model).Sort(ViewData["sort"] as GridSortOptions).Columns(columns =>
                     {
                         columns.For(c => c.OriginalLink).Named("Оригинальная ссылка");
                         columns.For(c => $"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Content("~")}{c.ShortedLink}")
                         .SortColumnName("ShortedLink").Named("Укороченная ссылка");
                         columns.For(c => c.CreationDate).Named("Дата создания");
                         columns.For(c => c.Follows).Named("Количество переходов");
-                    })
-                }
+                    }).Empty("У вас нет сохранённых ссылок")
             }
             else
             {
