@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Helpers;
 using System.Web.Mvc;
+using AspNet.Mvc.Grid;
+using AspNet.Mvc.Grid.Pagination;
+using AspNet.Mvc.Grid.Sorting;
 using URLShortener.Interfaces;
 using URLShortener.Services;
 using URLShortener.Tools;
@@ -26,28 +28,44 @@ namespace URLShortener.Controllers
         /// Метод для отображения ссылок пользователя
         /// </summary>
         /// <param name="pagesize">размер страницы</param>
-        /// <param name="pagenumber">номер страницы</param>
-        /// <param name="sortcolumn">колонка для сортировки</param>
-        /// <param name="direction">направление сортировки</param>
+        /// <param name="page">номер страницы</param>
+        /// <param name="Column">колонка для сортировки</param>
+        /// <param name="Direction">направление сортировки</param>
         /// <returns></returns>
-        public ActionResult Show(int pagesize = 10, int pagenumber = 1,
-            UserDataDisplay.SortCpoumnTypes sortcolumn = UserDataDisplay.SortCpoumnTypes.CreatioDate,
-            SortDirection direction = SortDirection.Ascending)
+        public ActionResult Show(int pagesize = 2, int page = 1,
+            UserDataDisplay.SortCpoumnTypes Column = UserDataDisplay.SortCpoumnTypes.CreatioDate,
+            SortDirection Direction = SortDirection.Ascending)
         {
             try
             {
                 ViewBag.pagesize = pagesize;
-                ViewBag.pagenumber = pagenumber;
-                ViewBag.sortcolumn = sortcolumn;
-                ViewBag.direction = direction;
+                ViewBag.pagenumber = page;
+                ViewBag.sortcolumn = Column;
+                ViewBag.direction = Direction;
 
                 var result = _userDataDisplay.GetUserPaginatedLinks(
                     Request.Cookies["URLShortenerTokenCookie"]?["token"],
-                    pagesize, direction, (int) sortcolumn, pagenumber);
+                    pagesize, Direction, (int) Column, page);
 
                 ViewBag.pages = result.Count;
 
-                return View(result.Links);
+                //TODO : DELETE!!
+                result.Links.Add(new DisplayedLink() { OriginalLink = "http://vk.com", ShortedLink = "fgi7ua", CreationDate = DateTime.Now, Follows = 4 });
+                result.Links.Add(new DisplayedLink() { OriginalLink = "http://ya.ru", ShortedLink = "fhi6ip", CreationDate = DateTime.Now, Follows = 100 });
+                result.Links.Add(new DisplayedLink() { OriginalLink = "http://vk.com", ShortedLink = "fgi7ua", CreationDate = DateTime.Now, Follows = 4 });
+                result.Links.Add(new DisplayedLink() { OriginalLink = "http://ya.ru", ShortedLink = "fhi6ip", CreationDate = DateTime.Now, Follows = 100 });
+                result.Links.Add(new DisplayedLink() { OriginalLink = "http://vk.com", ShortedLink = "fgi7ua", CreationDate = DateTime.Now, Follows = 4 });
+                result.Links.Add(new DisplayedLink() { OriginalLink = "http://ya.ru", ShortedLink = "fhi6ip", CreationDate = DateTime.Now, Follows = 100 });
+
+                var sortOptions = new GridSortOptions
+                {
+                    Direction = Direction,
+                    Column = Column.ToString()
+                };
+
+                ViewData["sort"] = sortOptions;
+
+                return View(result.Links.AsPagination(page, pagesize));
             }
             catch (BuisenessException buisExc)
             {
