@@ -27,8 +27,8 @@ namespace URLShortener.Tools
                     try
                     {
                         using (
-                            var file = new FileStream($"{errorDateTime.Date:yyyy-MM-dd}_{type}.txt",
-                                FileMode.Append, FileAccess.ReadWrite))
+                            var file = new FileStream($"D:/Logs/{errorDateTime.Date:yyyy-MM-dd}_{type}.txt",
+                                FileMode.Append, FileAccess.Write))
                         {
                             using (var writer = new StreamWriter(file))
                             {
@@ -37,7 +37,7 @@ namespace URLShortener.Tools
                             }
                         }
                     }
-                    catch
+                    catch (Exception exc)
                     {
                         return; // для будущей реализации на случай поломки логгера
                     }

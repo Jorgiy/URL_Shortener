@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using URLShortener.Interfaces;
@@ -61,7 +62,7 @@ namespace URLShortener.Controllers
         /// <param name="url">исходная ссылка</param>
         /// <returns></returns>
         [HttpPost]
-        public JsonResult CreateShortLink(string url)
+        public async Task<JsonResult> CreateShortLink(string url)
         {
             try
             {
@@ -93,7 +94,7 @@ namespace URLShortener.Controllers
             }
             catch (BuisenessException buisExc)
             {
-                Logger.LogAsync(buisExc.ErrorLevel, buisExc.Message, DateTime.Now);
+                Logger.LogAsync(buisExc.ErrorLevel, $"{buisExc.Message}. {buisExc.InnerException?.Message}", DateTime.Now);
                 return new JsonResult
                 {
                     Data = new CreationLinkResultModel() {Success = false, ErrorMessage = "Произошла ошибка"}
