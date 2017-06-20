@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using URLShortener.Interfaces;
 using URLShortener.Models;
 using URLShortener.Services;
@@ -36,27 +37,6 @@ namespace URLShortener.Controllers
         }
 
         /// <summary>
-        /// Метод для загрузки страницы после попытки создания ссылки
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public ActionResult Index(CreationLinkResultModel model)
-        {
-            if (model.TokenCreated)
-            {
-                var cookies = new HttpCookie("URLShortenerTokenCookie")
-                {
-                    ["token"] = model.Token,
-                    Expires = DateTime.Now.AddYears(1)
-                };
-                Response.Cookies.Add(cookies);
-            }
-
-            return View(model);
-        }
-
-        /// <summary>
         /// Поптка создать ссылку
         /// </summary>
         /// <param name="url">исходная ссылка</param>
@@ -76,7 +56,7 @@ namespace URLShortener.Controllers
                 }
 
                 var tokenResult = _tokenOperations.CreateToken(creationResult.LinkId,
-                    Request.Cookies["URLShortenerTokenCookie"]?["token"]);
+                    Request.Cookies["token"]?.Value);
 
                 return new JsonResult
                 {
@@ -128,8 +108,9 @@ namespace URLShortener.Controllers
             }
             else
             {
-                _linkOperator.IncrementFollowsAsync(shorturl);
-                return new RedirectResult(originalLink);
+                _linkOperator.IncrementFollows(shorturl);
+                Response.Redirect(originalLink);
+                return View();
             }
         }
     }

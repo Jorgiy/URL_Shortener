@@ -29,7 +29,7 @@ namespace URLShortener.Interfaces
         /// метод для подсчёта перехода по ссылкам
         /// </summary>
         /// <param name="shortenLink"></param>
-        void IncrementFollowsAsync(string shortenLink);
+        void IncrementFollows(string shortenLink);
     }
 
     /// <summary>

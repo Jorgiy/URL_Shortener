@@ -46,8 +46,9 @@ namespace URLShortener.Services
 
             lock (LockNewUrl)
             {
-                var possibleShortUrl = db.Links.FirstOrDefault(c => c.Url == url.Replace(@"http://", String.Empty));
-                // c http:// в базу не пишем
+                if (!new Regex("^http://|^ftp://|^https://").IsMatch(url)) url = url.Insert(0, "http://");
+
+                var possibleShortUrl = db.Links.FirstOrDefault(c => c.Url == url);
                 if (possibleShortUrl != null)
                     return new LinkCreationResult()
                     {
@@ -76,7 +77,7 @@ namespace URLShortener.Services
                         Follows = 0,
                         Id = nextUrlId,
                         ShortUrl = shortUrl,
-                        Url = url.Replace(@"http://", String.Empty)
+                        Url = url
                     });
 
                     db.SaveChanges();
@@ -99,31 +100,31 @@ namespace URLShortener.Services
             return db.Links.FirstOrDefault(c => c.ShortUrl == shortenLink)?.Url;
         }
 
-        public async void IncrementFollowsAsync(string shortenLink)
+        public void IncrementFollows(string shortenLink)
         {
-            await Task.Run(() =>
-                {
+            Task.Run(() =>
+               {
 
-                    var db = new UrlShortenerBaseEntities();
-                    lock (LockIncrementFollows)
-                    {
-                        var link = db.Links.FirstOrDefault(c => c.ShortUrl == shortenLink);
-                        if (link == null) return;
+                   var db = new UrlShortenerBaseEntities();
+                   lock (LockIncrementFollows)
+                   {
+                       var link = db.Links.FirstOrDefault(c => c.ShortUrl == shortenLink);
+                       if (link == null) return;
 
-                        ++link.Follows;
-                        try
-                        {
-                            db.SaveChanges();
-                        }
-                        catch (Exception exc)
-                        {
-                            Logger.LogAsync(ErrorType.Regular,
-                                $"При попытке прибавить количество переходов по ссылке произошла ошибка {exc.Message}",
-                                DateTime.Now);
-                        }
-                    }
-                }
-            );
+                       ++link.Follows;
+                       try
+                       {
+                           db.SaveChanges();
+                       }
+                       catch (Exception exc)
+                       {
+                           Logger.LogAsync(ErrorType.Regular,
+                               $"При попытке прибавить количество переходов по ссылке произошла ошибка {exc.Message}",
+                               DateTime.Now);
+                       }
+                   }
+               }
+           );
         }
     }
 

@@ -27,10 +27,13 @@
     <div class="row main-page-row">
         <div class="col-md-12 col-lg-12 col-sm-12">
             <div id="link-text-box">
-                <input type="text" id="text-box-input" placeholder="введите сюда ссылку" value="@if (Model != null)
-                                                                                                {
-                                                                                                    @(Model.Success ? shortUrl : String.Empty)
-                                                                                                }">
+                <input type="text" id="text-box-input" placeholder="введите сюда ссылку" @if (Model != null)
+                {
+                    if (Model.Success)
+                    {
+                        @($"value=\"{shortUrl}\" disabled=\"disabled\"")
+                    }
+                } />
                 <button  id="copy-button" data-clipboard-target="#text-box-input" style="@if (Model != null)
                                                                                                     {
                                                                                                         @(Model.Success ? "visibility: visible" : "visibility: hidden")
