@@ -17,7 +17,17 @@ namespace URLShortener.Converters
         /// <returns>результат конвертации</returns>
         public static string ConvertFrom10To36(int input)
         {
-            return Convert.ToString(input, 36);
+            const string chars = "0123456789abcdefghijklmnopqrstuvwxyz";
+
+            string result = "";
+
+            while (input > 0)
+            {
+                result += chars[input % 36];
+                input /= 36;
+            }
+
+            return result;
         }
     }
 }

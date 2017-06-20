@@ -39,7 +39,7 @@ namespace URLShortener.Services
                     ErrorMessage = "Слишком длинная ссылка, попробуйте уложиться в 850 символов"
                 };
 
-            if (regex.Match(url).Value != url)
+            if (regex.Match(url).Value != url || url == String.Empty)
                 return new LinkCreationResult() {Success = false, ErrorMessage = "Введите правильную ссылку"};
 
             var db = new UrlShortenerBaseEntities();

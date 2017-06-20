@@ -21,14 +21,19 @@ namespace URLShortener.Tools
             using (
                     var connection =
                         new SqlConnection(
-                            ConfigurationManager.ConnectionStrings["UrlShortenerBaseEntities"].ConnectionString))
+                            ConfigurationManager.ConnectionStrings["UrlShortenerBaseADO"].ConnectionString))
             {
                 connection.Open();
                 using (var command = new SqlCommand($"SELECT NEXT VALUE FOR [dbo].[{type}]"))
                 {
                     command.Connection = connection;
                     var reader = command.ExecuteReader();
-                    return reader.GetInt32(0);
+                    var nextId = 0;
+                    while (reader.Read())
+                    {
+                        nextId = reader.GetInt32(0);
+                    }
+                    return nextId;
                 }
             }
         }

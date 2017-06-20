@@ -8,8 +8,8 @@
 <div class="container" id="page-content">
     @if (Model?.ErrorMessage != null)
     {
-        <div class="row main-page-row error-row">
-            <div class="col-md-12 col-lg-12 col-sm-12">@Model.ErrorMessage</div>
+        <div class="row main-page-row">
+            <div class="col-md-6 col-lg-6 col-sm-6 error-row">@Model.ErrorMessage</div>
         </div>
     }
     <div class="row">
@@ -37,7 +37,7 @@
                                                                                                     }
                                                                                                     else
                                                                                                     {
-                                                                                                        @("visibility: visible")
+                                                                                                        @("visibility: hidden")
                                                                                                     }">Копировать</button>
             </div>
         </div>
