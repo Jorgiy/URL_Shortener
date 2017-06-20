@@ -18,9 +18,9 @@ namespace URLShortener.Tools
         /// <param name="type">тип ошибки</param>
         /// <param name="text">содержание</param>
         /// <param name="errorDateTime">время и дата, когда ошибка появилась</param>
-        public static async void LogAsync(ErrorType type, string text, DateTime errorDateTime)
+        public static void Log(ErrorType type, string text, DateTime errorDateTime)
         {
-            await Task.Run(() =>
+            Task.Run(() =>
             {
                 lock (LockObject)
                 {

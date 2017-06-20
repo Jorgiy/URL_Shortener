@@ -118,7 +118,7 @@ namespace URLShortener.Services
                        }
                        catch (Exception exc)
                        {
-                           Logger.LogAsync(ErrorType.Regular,
+                           Logger.Log(ErrorType.Regular,
                                $"При попытке прибавить количество переходов по ссылке произошла ошибка {exc.Message}",
                                DateTime.Now);
                        }

@@ -42,7 +42,7 @@ namespace URLShortener.Controllers
         /// <param name="url">исходная ссылка</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<JsonResult> CreateShortLink(string url)
+        public JsonResult CreateShortLink(string url)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace URLShortener.Controllers
             }
             catch (BuisenessException buisExc)
             {
-                Logger.LogAsync(buisExc.ErrorLevel, $"{buisExc.Message}. {buisExc.InnerException?.Message}", DateTime.Now);
+                Logger.Log(buisExc.ErrorLevel, $"{buisExc.Message}. {buisExc.InnerException?.Message}", DateTime.Now);
                 return new JsonResult
                 {
                     Data = new CreationLinkResultModel() {Success = false, ErrorMessage = "Произошла ошибка"}
@@ -82,7 +82,7 @@ namespace URLShortener.Controllers
             }
             catch (Exception exc)
             {
-                Logger.LogAsync(ErrorType.Critical, exc.Message, DateTime.Now);
+                Logger.Log(ErrorType.Critical, exc.Message, DateTime.Now);
                 return new JsonResult
                 {
                     Data = new CreationLinkResultModel() { Success = false, ErrorMessage = "Произошла ошибка" }

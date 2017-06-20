@@ -39,7 +39,7 @@ namespace URLShortener.Services
                 }
                 catch (Exception seqEx)
                 {
-                    Logger.LogAsync(ErrorType.Regular, $"Не удалось получить айди для нового токена. {seqEx.Message}",
+                    Logger.Log(ErrorType.Regular, $"Не удалось получить айди для нового токена. {seqEx.Message}",
                         DateTime.Now);
                     return new TokenCreationResult()
                     {
@@ -58,7 +58,7 @@ namespace URLShortener.Services
                 }
                 catch (Exception addTokenEx)
                 {
-                    Logger.LogAsync(ErrorType.Regular,
+                    Logger.Log(ErrorType.Regular,
                         $"Не удалось вставить токен в таблицу токенов. {addTokenEx.Message}",
                         DateTime.Now);
                     return new TokenCreationResult()
@@ -77,7 +77,7 @@ namespace URLShortener.Services
             }
             catch (Exception linkTokenExc)
             {
-                Logger.LogAsync(ErrorType.Regular,
+                Logger.Log(ErrorType.Regular,
                         $"Не удалось удалить связать сущность токена и ссылки. {linkTokenExc.Message}",
                         DateTime.Now);
 
@@ -88,7 +88,7 @@ namespace URLShortener.Services
                 }
                 catch (Exception remTokExc)
                 {
-                    Logger.LogAsync(ErrorType.Regular,
+                    Logger.Log(ErrorType.Regular,
                         $"Не удалось удалить сущность токена после неудачной попытки связать токен и ссылку. {remTokExc.Message}",
                         DateTime.Now);
                 }

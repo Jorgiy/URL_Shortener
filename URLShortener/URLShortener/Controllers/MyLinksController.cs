@@ -68,12 +68,12 @@ namespace URLShortener.Controllers
             }
             catch (BuisenessException buisExc)
             {
-                Logger.LogAsync(buisExc.ErrorLevel, $"{buisExc.Message}. {buisExc.InnerException?.Message}", DateTime.Now);
+                Logger.Log(buisExc.ErrorLevel, $"{buisExc.Message}. {buisExc.InnerException?.Message}", DateTime.Now);
                 ViewBag.ErrorMessage = "При загрузке \"Моих ссылок\" произошла ошибка";
             }
             catch (Exception exc)
             {
-                Logger.LogAsync(ErrorType.Critical, exc.Message, DateTime.Now);
+                Logger.Log(ErrorType.Critical, exc.Message, DateTime.Now);
                 ViewBag.ErrorMessage = "При загрузке \"Моих ссылок\" произошла ошибка";
             }
 
