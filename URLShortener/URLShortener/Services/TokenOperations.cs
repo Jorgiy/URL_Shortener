@@ -69,35 +69,43 @@ namespace URLShortener.Services
                 }
             }
 
-            db.TokenMapping.Add(new TokenMapping() {LinkId = linkId, TokenId = nextUserId});
-
-            try
+            // проверим, нет ли связки между токеном и ссылкой
+            if (!db.TokenMapping.Any(c => c.LinkId == linkId && c.TokenId == nextUserId))
             {
-                db.SaveChanges();
-            }
-            catch (Exception linkTokenExc)
-            {
-                Logger.Log(ErrorType.Regular,
-                        $"Не удалось удалить связать сущность токена и ссылки. {linkTokenExc.Message}",
-                        DateTime.Now);
+                db.TokenMapping.Add(new TokenMapping() {LinkId = linkId, TokenId = nextUserId});
 
                 try
                 {
-                    db.Tokens.Remove(db.Tokens.FirstOrDefault(c => c.Id == nextUserId));
                     db.SaveChanges();
                 }
-                catch (Exception remTokExc)
+                catch (Exception linkTokenExc)
                 {
                     Logger.Log(ErrorType.Regular,
-                        $"Не удалось удалить сущность токена после неудачной попытки связать токен и ссылку. {remTokExc.Message}",
+                        $"Не удалось удалить связать сущность токена и ссылки. {linkTokenExc.Message}",
                         DateTime.Now);
-                }
 
-                return new TokenCreationResult()
-                {
-                    Success = false,
-                    ErrorMessage = "Произошла ошибка, ссылка не была добавлена в \"Мои ссылки\""
-                };
+                    if (createdNewToken)
+                    {
+                        try
+                        {
+                            db.Tokens.Remove(db.Tokens.FirstOrDefault(c => c.Id == nextUserId));
+                            db.SaveChanges();
+                        }
+                        catch (Exception remTokExc)
+                        {
+                            Logger.Log(ErrorType.Regular,
+                                $"Не удалось удалить сущность токена после неудачной попытки связать токен и ссылку. {remTokExc.Message}",
+                                DateTime.Now);
+                        }
+                    }
+
+
+                    return new TokenCreationResult()
+                    {
+                        Success = false,
+                        ErrorMessage = "Произошла ошибка, ссылка не была добавлена в \"Мои ссылки\""
+                    };
+                }
             }
 
             return new TokenCreationResult()
