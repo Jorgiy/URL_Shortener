@@ -37,35 +37,53 @@ function InitPage() {
     self.setTitle = function (oldurl) {
         $("#title").text("Ссылка" + oldurl + " была укорочена до:");
     }
+
+    self.setInputBox = function(newUrl) {
+        $("#text-box-input").val(newUrl);
+        $("#text-box-input").attr("disabled", "disabled");
+    }
+
+    self.setCopyButtonEnabled = function() {
+        $("#copy-button").css("visibility", "visible");
+    }
+
+    self.changeMainButtonFunc = function() {
+        $(".main-button").attr("id", "return-button");
+        $(".main-button").text("На главную");
+    }
     
     var viewModel = {
-        shortLink: function() {
-            var input = $("#text-box-input").val();
+        shortLink: function () {
+            if ($(".main-button").is("#shorten-button")) {
+                var input = $("#text-box-input").val();
 
-            self.disableShortingButton();
+                self.disableShortingButton();
 
-            $.ajax({
-                url: "Home/CreateShortLink",
-                type: "post",
-                data: { url: input },
-                success: function (res) {
-                    if (res.ErrorMessage != null) self.addError(res.ErrorMessage);
+                $.ajax({
+                    url: "Home/CreateShortLink",
+                    type: "post",
+                    data: { url: input },
+                    success: function(res) {
+                        if (res.ErrorMessage != null) self.addError(res.ErrorMessage);
 
-                    if (res.Success) {
-                        self.setTitle(res.Url);
+                        if (res.Success) {
+                            self.setTitle(res.Url);
+                            self.setInputBox(res.Host + res.ShortUrl);
+                            self.setCopyButtonEnabled();
+                            self.changeMainButtonFunc();
+
+                            if (res.TokenCreated) self.enableShortingButton();
+                        }
+                        self.setCookies(res.Token);
+                    },
+                    error: function() {
+                        self.addError("Произошла неизвестная ошибка :(");
+                        self.enableShortingButton();
                     }
-                    self.enableShortingButton();
-                    self.setCookies(res.Token);
-                },
-                error : function() {
-                    self.addError("Произошла неизвестная ошибка :(");
-                    self.enableShortingButton();
-                }
-            });
-        },
-
-        returnToMainLink: function() {
-            window.location.href ="";
+                });
+            } else {
+                window.location.href = "";
+            }
         }
     }
 

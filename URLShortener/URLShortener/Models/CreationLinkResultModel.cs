@@ -39,5 +39,10 @@ namespace URLShortener.Models
         /// создан ли токен
         /// </summary>
         public bool TokenCreated { get; set; }
+
+        /// <summary>
+        /// Ноименование текущего хоста
+        /// </summary>
+        public string Host { get; set; }
     }
 }

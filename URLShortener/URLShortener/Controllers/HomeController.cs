@@ -68,7 +68,8 @@ namespace URLShortener.Controllers
                             ShortUrl = creationResult.ShortLink,
                             Token = tokenResult.Cookie,
                             TokenCreated = tokenResult.NewToken,
-                            Url = url
+                            Url = url,
+                            Host = $"{ Request?.Url?.Scheme }://{Request?.Url?.Authority}{Url.Content("~")}"
                         }
                 };
             }

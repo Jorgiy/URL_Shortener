@@ -35,6 +35,7 @@ textarea {
 #copy-button {
     border: 0;
     background: transparent;
+    visibility: hidden;
 }
 
 #text-box-input {
@@ -49,4 +50,8 @@ textarea {
 
 .error-row {
     background-color: red;
+}
+
+.main-button {
+    
 }
