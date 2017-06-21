@@ -20,10 +20,12 @@ function InitPage() {
 
     self.enableShortingButton = function() {
         $(".main-button").removeAttr("disabled", "disabled");
+        $("#main-button-container").find("img").remove();
     }
 
     self.disableShortingButton = function () {
         $(".main-button").attr("disabled", "disabled");
+        $("#main-button-container").append("<img src=\"Content/loading.gif\" alt=\"load-gif\"></img>");
     }
 
     self.addError = function(errortext) {

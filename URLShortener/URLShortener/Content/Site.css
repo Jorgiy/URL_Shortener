@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 0px;
     padding-bottom: 0px;
+    font-weight: bolder;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -20,7 +21,7 @@
 input,
 select,
 textarea {
-    max-width: 280px;
+    max-width: 433px;
 }
 
 #link-text-box {
@@ -41,6 +42,7 @@ textarea {
 #text-box-input {
     border: 0;
     background: transparent;
+    width: 300px;
 }
 
 .main-page-row {
@@ -49,7 +51,11 @@ textarea {
 }
 
 .error-row {
-    background-color: red;
+    background-color: #ff7d7d;
+}
+
+.menu-element {
+    /*color: blue;*/
 }
 
 .main-button {
