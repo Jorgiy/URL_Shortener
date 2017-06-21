@@ -32,29 +32,15 @@ namespace URLShortener.Controllers
         /// <param name="Column">колонка для сортировки</param>
         /// <param name="Direction">направление сортировки</param>
         /// <returns></returns>
-        public ActionResult Show(int pagesize = 2, int page = 1,
+        public ActionResult Show(int page = 1,
             UserDataDisplay.SortCpoumnTypes Column = UserDataDisplay.SortCpoumnTypes.CreatioDate,
             SortDirection Direction = SortDirection.Ascending)
         {
             try
             {
-                ViewBag.pagesize = pagesize;
-                ViewBag.pagenumber = page;
-                ViewBag.sortcolumn = Column;
-                ViewBag.direction = Direction;
-
                 var result = _userDataDisplay.GetUserPaginatedLinks(
-                    Request.Cookies["URLShortenerTokenCookie"]?["token"],
-                    pagesize, Direction, (int) Column, page);
-
-                //TODO : DELETE!!
-                var displayedLinks = result as IList<IDisplayedLink> ?? result.ToList();
-                displayedLinks.Add(new DisplayedLink() { OriginalLink = "http://vk.com", ShortedLink = "fgi7ua", CreationDate = DateTime.Now, Follows = 4 });
-                displayedLinks.Add(new DisplayedLink() { OriginalLink = "http://ya.ru", ShortedLink = "fhi6ip", CreationDate = DateTime.Now, Follows = 100 });
-                displayedLinks.Add(new DisplayedLink() { OriginalLink = "http://vk.com", ShortedLink = "fgi7ua", CreationDate = DateTime.Now, Follows = 4 });
-                displayedLinks.Add(new DisplayedLink() { OriginalLink = "http://ya.ru", ShortedLink = "fhi6ip", CreationDate = DateTime.Now, Follows = 100 });
-                displayedLinks.Add(new DisplayedLink() { OriginalLink = "http://vk.com", ShortedLink = "fgi7ua", CreationDate = DateTime.Now, Follows = 4 });
-                displayedLinks.Add(new DisplayedLink() { OriginalLink = "http://ya.ru", ShortedLink = "fhi6ip", CreationDate = DateTime.Now, Follows = 100 });
+                    Request.Cookies["token"]?.Value,
+                    10, Direction, (int) Column, page);
 
                 var sortOptions = new GridSortOptions
                 {
@@ -64,7 +50,7 @@ namespace URLShortener.Controllers
 
                 ViewData["sort"] = sortOptions;
 
-                return View(result.AsPagination(page, pagesize));
+                return View(result.AsPagination(page, 10));
             }
             catch (BuisenessException buisExc)
             {

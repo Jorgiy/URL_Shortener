@@ -1,11 +1,10 @@
-﻿@model URLShortener.Models.CreationLinkResultModel
-@{
+﻿@{
     ViewBag.Title = "URL Shortener";
 }
 
 <div class="container" id="page-content">
     <div class="row">
-        <div class="col-md-3" id="title">
+        <div class="col-md-12 col-lg-12 col-sm-12" id="title">
             Сделайте ссылки короче
         </div>
     </div>
@@ -19,7 +18,7 @@
     </div>
     <div class="row main-page-row">
         <div class="col-md-12 col-lg-12 col-sm-12">
-            <button id="shorten-button" data-bind="click: shortLink">Укоротить!</button>
+            <button class="main-button" id="shorten-button" data-bind="click: shortLink">Укоротить!</button>
         </div>
     </div>
 </div>

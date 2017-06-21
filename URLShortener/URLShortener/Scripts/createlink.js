@@ -19,11 +19,11 @@ function InitPage() {
     }
 
     self.enableShortingButton = function() {
-        $("#shorten-button").removeAttr("disabled", "disabled");
+        $(".main-button").removeAttr("disabled", "disabled");
     }
 
     self.disableShortingButton = function () {
-        $("#shorten-button").attr("disabled", "disabled");
+        $(".main-button").attr("disabled", "disabled");
     }
 
     self.addError = function(errortext) {
@@ -35,12 +35,12 @@ function InitPage() {
     }
 
     self.setTitle = function (oldurl) {
-        $("#title").text("Ссылка" + oldurl + " была укорочена до:");
+        $("#title").text("Ссылка " + oldurl + " была укорочена до:");
     }
 
     self.setInputBox = function(newUrl) {
         $("#text-box-input").val(newUrl);
-        $("#text-box-input").attr("disabled", "disabled");
+        $("#text-box-input").attr("readonly", "readonly");
     }
 
     self.setCopyButtonEnabled = function() {

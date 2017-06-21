@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using AspNet.Mvc.Grid.Pagination;
 using AspNet.Mvc.Grid.Sorting;
 using URLShortener.DataContexts;
 using URLShortener.Interfaces;
@@ -19,52 +20,22 @@ namespace URLShortener.Services
             
             var db = new UrlShortenerBaseEntities();
             var sortCol = Enum.IsDefined(typeof(SortCpoumnTypes), sortColumn)
-                ? (SortCpoumnTypes) sortColumn
+                ? (SortCpoumnTypes)sortColumn
                 : SortCpoumnTypes.CreatioDate;
 
-            try
-            {
-                if (direction == SortDirection.Ascending)
-                {
-                    return db.TokenMapping.Include("Tokens")
+
+            return SortColumnChoise(sortCol,
+                    db.TokenMapping.Include("Tokens")
                         .Include("Links")
                         .Where(c => c.Tokens.Token == token)
-                        .OrderBy(fields => SortColumnChoise(sortCol, fields))
-                        .Skip((pageNumber - 1) * pageSize)
-                        .Take(pageSize)
-                        .Select(page => new DisplayedLink()
-                        {
-                            CreationDate = page.Links.CreationDate,
-                            Follows = page.Links.Follows,
-                            OriginalLink = page.Links.Url,
-                            ShortedLink = page.Links.ShortUrl
-                        });
-                }
-                else
+                    , direction
+                ).Select(page => new DisplayedLink()
                 {
-                    return db.TokenMapping.Include("Tokens")
-                        .Include("Links")
-                        .Where(c => c.Tokens.Token == token)
-                        .OrderBy(fields => SortColumnChoise(sortCol, fields))
-                        .Skip((pageNumber - 1) * pageSize)
-                        .Take(pageSize)
-                        .Select(page => new DisplayedLink()
-                        {
-                            CreationDate = page.Links.CreationDate,
-                            Follows = page.Links.Follows,
-                            OriginalLink = page.Links.Url,
-                            ShortedLink = page.Links.ShortUrl
-                        });
-                }
-            }
-            catch (Exception exc)
-            {
-                throw new BuisenessException(
-                    "Ошибка на стороне базы данных при попытке отображения ссылок пользователя.", exc)
-                {
-                    ErrorLevel = ErrorType.Critical
-                };
-            }
+                    CreationDate = page.Links.CreationDate,
+                    Follows = page.Links.Follows,
+                    OriginalLink = page.Links.Url,
+                    ShortedLink = page.Links.ShortUrl
+                });
         }
 
         /// <summary>
@@ -72,21 +43,33 @@ namespace URLShortener.Services
         /// </summary>
         /// <param name="column">колонка</param>
         /// <param name="input">входная сущность</param>
+        /// <param name="direction">направление сортировки</param>
         /// <returns></returns>
-        private static object SortColumnChoise(SortCpoumnTypes column, TokenMapping input)
+        private static IQueryable<TokenMapping> SortColumnChoise(SortCpoumnTypes column, IQueryable<TokenMapping> input,
+            SortDirection direction)
         {
             switch (column)
             {
                 case SortCpoumnTypes.OriginalLink:
-                    return input.Links.Url;
+                    return direction == SortDirection.Ascending
+                        ? input.OrderBy(c => c.Links.Url)
+                        : input.OrderByDescending(c => c.Links.Url);
                 case SortCpoumnTypes.ShortedLink:
-                    return input.Links.ShortUrl;
+                    return direction == SortDirection.Ascending
+                        ? input.OrderBy(c => c.Links.ShortUrl)
+                        : input.OrderByDescending(c => c.Links.ShortUrl);
                 case SortCpoumnTypes.CreatioDate:
-                    return input.Links.CreationDate;
+                    return direction == SortDirection.Ascending
+                        ? input.OrderBy(c => c.Links.CreationDate)
+                        : input.OrderByDescending(c => c.Links.CreationDate);
                 case SortCpoumnTypes.Follows:
-                    return input.Links.Follows;
+                    return direction == SortDirection.Ascending
+                        ? input.OrderBy(c => c.Links.Follows)
+                        : input.OrderByDescending(c => c.Links.Follows);
                 default:
-                    return input.Links.CreationDate;
+                    return direction == SortDirection.Ascending
+                        ? input.OrderBy(c => c.Links.CreationDate)
+                        : input.OrderByDescending(c => c.Links.CreationDate);
             }
         }
 

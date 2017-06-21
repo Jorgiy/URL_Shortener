@@ -22,7 +22,7 @@
             Список моих ссылок:
         </div>
         <div class="row main-page-row">
-            @Html.Pager(Model).Format("Ссылки {0} - {1} из {2}").First(Model.FirstItem.ToString()).Last(Model.LastItem.ToString()).Next("Следующая").Previous("Предыдущая")
+            @Html.Pager(Model).Format("Ссылки {0} - {1} из {2}").First("1").Last(Model.TotalPages.ToString()).Next("Следующая").Previous("Предыдущая")
         </div>
         <div class="row main-page-row">
             @if (Model != null)
