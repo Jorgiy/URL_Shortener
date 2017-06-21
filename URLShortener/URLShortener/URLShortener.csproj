@@ -186,7 +186,10 @@
     <Compile Include="Interfaces\IUserDataDisplay.cs" />
     <Compile Include="Models\CreationLinkResultModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\DisplayedLink.cs" />
+    <Compile Include="Services\LinkCreationResult.cs" />
     <Compile Include="Services\LinkOperator.cs" />
+    <Compile Include="Services\TokenCreationResult.cs" />
     <Compile Include="Services\TokenOperations.cs" />
     <Compile Include="Services\UserDataDisplay.cs" />
     <Compile Include="Tools\BuisenessException.cs" />
