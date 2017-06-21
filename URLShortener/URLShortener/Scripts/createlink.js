@@ -72,9 +72,9 @@ function InitPage() {
                             self.setCopyButtonEnabled();
                             self.changeMainButtonFunc();
 
-                            if (res.TokenCreated) self.enableShortingButton();
+                            if (res.TokenCreated) self.setCookies(res.Token);
                         }
-                        self.setCookies(res.Token);
+                        self.enableShortingButton();
                     },
                     error: function() {
                         self.addError("Произошла неизвестная ошибка :(");
