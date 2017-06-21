@@ -2,26 +2,12 @@
 @{
     ViewBag.Title = "URL Shortener";
     var shortUrl = $"{Request?.Url?.Scheme}://{Request?.Url?.Authority}{Url.Content("~")}{Model?.ShortUrl}";
-    const string title = "Сделайте ссылки короче";
 }
 
 <div class="container" id="page-content">
-    @if (Model?.ErrorMessage != null)
-    {
-        <div class="row main-page-row">
-            <div class="col-md-6 col-lg-6 col-sm-6 error-row">@Model.ErrorMessage</div>
-        </div>
-    }
     <div class="row">
-        <div class="col-md-3">
-            @if (Model != null)
-            {
-                @(Model.Success ? $"Ссылка {Model.Url} была укорочена до:" : title)
-            }
-            else
-            {
-                @title
-            }
+        <div class="col-md-3" id="title">
+            Сделайте ссылки короче
         </div>
     </div>
     <div class="row main-page-row">
