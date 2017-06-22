@@ -47,6 +47,9 @@ function InitPage() {
         }
         $(self.newErrorElement(errortext)).prependTo("div.container").show("slow");
     };
+    self.deleteError = function() {
+        $("div.error-header").remove();
+    }
     self.setTitle = function (oldurl) {
         $("#title").text("Ссылка " + oldurl + " была укорочена до:");
     };
@@ -85,6 +88,7 @@ function InitPage() {
                             self.changeMainButtonFunc();
 
                             if (res.TokenCreated) self.setCookies(res.Token);
+                            self.deleteError();
                         }
                         self.enableShortingButton();
                     },
