@@ -18,26 +18,18 @@
         { "class", "grid-cell-link"}
     };
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Show</title>
-</head>
-<body>
-    <div class="container" id="page-content">
-        <div class="row main-page-row">
-            Список моих ссылок:
-        </div>
-        <div class="row main-page-row col-lg-12 col-md-12 col-sm-12">
-            @Html.Pager(Model).Format("Ссылки: {0} - {1} из {2}      Страницы: ").First("1").Last(Model.TotalPages.ToString()).Next("Следующая").Previous("Предыдущая")
-        </div>
-        <div class="row main-page-row col-lg-12 col-md-12 col-sm-12">
-            @if (Model != null)
+<script src="~/Scripts/mylinkspage.js"></script>
+<div class="container" id="page-content">
+    <div class="row main-page-row">
+        Список моих ссылок:
+    </div>
+    <div class="row main-page-row col-lg-12 col-md-12 col-sm-12">
+        @Html.Pager(Model).Format("Ссылки: {0} - {1} из {2}").First("      Страницы: 1").Last(Model.TotalPages.ToString()).Next("Следующая").Previous("Предыдущая")
+    </div>
+    <div class="row main-page-row col-lg-12 col-md-12 col-sm-12">
+        @if (Model != null)
             {
-                @Html.Grid(Model).Sort(ViewData["sort"] as GridSortOptions).Columns(columns =>
+            @Html.Grid(Model).Sort(ViewData["sort"] as GridSortOptions).Columns(columns =>
            {
                columns.For(c => c.OriginalLink).Named("Оригинальная ссылка ").Attributes(c => linkAttributes);
 
@@ -49,12 +41,10 @@
 
                columns.For(c => c.Follows).Named("Количество переходов ").Attributes(c => attributes);
            }).Empty("У вас нет сохранённых ссылок")
-            }
-            else
-            {
-                @Html.Raw(ViewBag.ErrorMessage)
-            }
-        </div>
+        }
+        else
+        {
+            @Html.Raw(ViewBag.ErrorMessage)
+        }
     </div>
-</body>
-</html>
+</div>
