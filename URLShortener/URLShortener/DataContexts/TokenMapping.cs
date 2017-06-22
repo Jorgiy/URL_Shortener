@@ -17,6 +17,7 @@ namespace URLShortener.DataContexts
         public int LinkId { get; set; }
         public int TokenId { get; set; }
         public long MapId { get; set; }
+        public System.DateTime CreationDate { get; set; }
     
         public virtual Links Links { get; set; }
         public virtual Tokens Tokens { get; set; }

@@ -31,7 +31,7 @@ namespace URLShortener.Services
                     , direction
                 ).Select(page => new DisplayedLink()
                 {
-                    CreationDate = page.Links.CreationDate,
+                    CreationDate = page.CreationDate,
                     Follows = page.Links.Follows,
                     OriginalLink = page.Links.Url,
                     ShortedLink = page.Links.ShortUrl
@@ -60,16 +60,16 @@ namespace URLShortener.Services
                         : input.OrderByDescending(c => c.Links.ShortUrl);
                 case SortCpoumnTypes.CreationDate:
                     return direction == SortDirection.Ascending
-                        ? input.OrderBy(c => c.Links.CreationDate)
-                        : input.OrderByDescending(c => c.Links.CreationDate);
+                        ? input.OrderBy(c => c.CreationDate)
+                        : input.OrderByDescending(c => c.CreationDate);
                 case SortCpoumnTypes.Follows:
                     return direction == SortDirection.Ascending
                         ? input.OrderBy(c => c.Links.Follows)
                         : input.OrderByDescending(c => c.Links.Follows);
                 default:
                     return direction == SortDirection.Ascending
-                        ? input.OrderBy(c => c.Links.CreationDate)
-                        : input.OrderByDescending(c => c.Links.CreationDate);
+                        ? input.OrderBy(c => c.CreationDate)
+                        : input.OrderByDescending(c => c.CreationDate);
             }
         }
 

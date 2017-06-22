@@ -17,23 +17,23 @@ namespace URLShortener.Tools
         /// </summary>
         /// <param name="type">тип ошибки</param>
         /// <param name="text">содержание</param>
-        /// <param name="errorDateTime">время и дата, когда ошибка появилась</param>
-        public static void Log(ErrorType type, string text, DateTime errorDateTime)
+        public static void Log(ErrorType type, string text)
         {
             Task.Run(() =>
             {
                 lock (LockObject)
                 {
+                    var datetime = DateTime.UtcNow;
                     try
                     {
                         using (
-                            var file = new FileStream($"D:/Logs/{errorDateTime.Date:yyyy-MM-dd}_{type}.txt",
+                            var file = new FileStream($"D:/Logs/{datetime.Date:yyyy-MM-dd}_{type}.txt",
                                 FileMode.Append, FileAccess.Write))
                         {
                             using (var writer = new StreamWriter(file))
                             {
                                 writer.Write(
-                                    $"{errorDateTime.Hour}:{errorDateTime.Minute}:{errorDateTime.Second} {text ?? String.Empty}\n");
+                                    $"{datetime.Hour}:{datetime.Minute}:{datetime.Second} {text ?? String.Empty}\n");
                             }
                         }
                     }

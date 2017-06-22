@@ -27,7 +27,6 @@ namespace URLShortener.Controllers
         /// <summary>
         /// Метод для отображения ссылок пользователя
         /// </summary>
-        /// <param name="pagesize">размер страницы</param>
         /// <param name="page">номер страницы</param>
         /// <param name="Column">колонка для сортировки</param>
         /// <param name="Direction">направление сортировки</param>
@@ -54,12 +53,12 @@ namespace URLShortener.Controllers
             }
             catch (BuisenessException buisExc)
             {
-                Logger.Log(buisExc.ErrorLevel, $"{buisExc.Message}. {buisExc.InnerException?.Message}", DateTime.Now);
+                Logger.Log(buisExc.ErrorLevel, $"{buisExc.Message}. {buisExc.InnerException?.Message}");
                 ViewBag.ErrorMessage = "При загрузке \"Моих ссылок\" произошла ошибка";
             }
             catch (Exception exc)
             {
-                Logger.Log(ErrorType.Critical, exc.Message, DateTime.Now);
+                Logger.Log(ErrorType.Critical, exc.Message);
                 ViewBag.ErrorMessage = "При загрузке \"Моих ссылок\" произошла ошибка";
             }
 

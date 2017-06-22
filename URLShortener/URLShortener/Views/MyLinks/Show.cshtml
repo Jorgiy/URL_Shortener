@@ -36,7 +36,7 @@
                columns.For(c => $"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Content("~")}{c.ShortedLink}")
                .SortColumnName("ShortedLink").Named("Укороченная ссылка ").Attributes(c => linkAttributes);
 
-               columns.For(c => c.CreationDate.ToString("yyyy-MM-dd hh:mm")).Named("Дата создания ").SortColumnName("CreationDate")
+               columns.For(c => c.CreationDate.ToString("yyyy-MM-dd HH:mm")).Named("Дата создания ").SortColumnName("CreationDate")
                .Attributes(c => attributes);
 
                columns.For(c => c.Follows).Named("Количество переходов ").Attributes(c => attributes);

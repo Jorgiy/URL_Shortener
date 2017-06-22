@@ -73,7 +73,6 @@ namespace URLShortener.Services
 
                     db.Links.Add(new Links()
                     {
-                        CreationDate = DateTime.Now,
                         Follows = 0,
                         Id = nextUrlId,
                         ShortUrl = shortUrl,
@@ -119,8 +118,7 @@ namespace URLShortener.Services
                        catch (Exception exc)
                        {
                            Logger.Log(ErrorType.Regular,
-                               $"При попытке прибавить количество переходов по ссылке произошла ошибка {exc.Message}",
-                               DateTime.Now);
+                               $"При попытке прибавить количество переходов по ссылке произошла ошибка {exc.Message}");
                        }
                    }
                }

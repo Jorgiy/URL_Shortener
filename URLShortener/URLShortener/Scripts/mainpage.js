@@ -61,7 +61,11 @@ function InitPage() {
                 $.ajax({
                     url: "Home/CreateShortLink",
                     type: "post",
-                    data: { url: input },
+                    data:
+                    {
+                        url: input,
+                        time: new Date().getTimezoneOffset() / 60
+                    },
                     success: function (res) {
                         if (res.ErrorMessage != null) self.addError(res.ErrorMessage);
 

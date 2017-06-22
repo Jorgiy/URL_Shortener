@@ -16,8 +16,9 @@ namespace URLShortener.Interfaces
         /// </summary>
         /// <param name="linkId">ссылка для привязки токена</param>
         /// <param name="token">если у пользователя есть токен</param>
+        /// <param name="date">дата создания ссылки</param>
         /// <returns>результат создания связки токена в хранилище данных</returns>
-        ITokenCreationResult CreateToken(int linkId, string token);
+        ITokenCreationResult CreateToken(int linkId, DateTime date, string token);
     }
 
     /// <summary>

@@ -23,7 +23,7 @@ namespace URLShortener
         {
             var exc = Server.GetLastError();
             Response.Write("<h2>Упс, кажется, что то сломалось :(</h2>\n");
-            Logger.Log(ErrorType.Critical, $"Глобальная ошибка: {exc}", DateTime.Now);
+            Logger.Log(ErrorType.Critical, $"Глобальная ошибка: {exc}");
             Server.ClearError();
         }
     }

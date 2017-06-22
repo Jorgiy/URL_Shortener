@@ -21,7 +21,6 @@ namespace URLShortener.DataContexts
     
         public int Id { get; set; }
         public string Url { get; set; }
-        public System.DateTime CreationDate { get; set; }
         public long Follows { get; set; }
         public string ShortUrl { get; set; }
     

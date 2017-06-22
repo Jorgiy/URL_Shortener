@@ -40,9 +40,10 @@ namespace URLShortener.Controllers
         /// Поптка создать ссылку
         /// </summary>
         /// <param name="url">исходная ссылка</param>
+        /// <param name="time">оффсет текущего часового пояса</param>
         /// <returns></returns>
         [HttpPost]
-        public JsonResult CreateShortLink(string url)
+        public JsonResult CreateShortLink(string url, int time)
         {
             try
             {
@@ -56,7 +57,7 @@ namespace URLShortener.Controllers
                 }
 
                 var tokenResult = _tokenOperations.CreateToken(creationResult.LinkId,
-                    Request.Cookies["token"]?.Value);
+                    DateTime.UtcNow.AddHours(time * -1), Request.Cookies["token"]?.Value);
 
                 return new JsonResult
                 {
@@ -75,7 +76,7 @@ namespace URLShortener.Controllers
             }
             catch (BuisenessException buisExc)
             {
-                Logger.Log(buisExc.ErrorLevel, $"{buisExc.Message}. {buisExc.InnerException?.Message}", DateTime.Now);
+                Logger.Log(buisExc.ErrorLevel, $"{buisExc.Message}. {buisExc.InnerException?.Message}");
                 return new JsonResult
                 {
                     Data = new CreationLinkResultModel() {Success = false, ErrorMessage = "Произошла ошибка"}
@@ -83,7 +84,7 @@ namespace URLShortener.Controllers
             }
             catch (Exception exc)
             {
-                Logger.Log(ErrorType.Critical, exc.Message, DateTime.Now);
+                Logger.Log(ErrorType.Critical, exc.Message);
                 return new JsonResult
                 {
                     Data = new CreationLinkResultModel() { Success = false, ErrorMessage = "Произошла ошибка" }

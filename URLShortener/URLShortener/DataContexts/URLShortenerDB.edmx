@@ -4,14 +4,13 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище UrlShortenerBaseModel" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище UrlShortenerBaseModel" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Links">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Url" Type="nvarchar" MaxLength="850" Nullable="false" />
-          <Property Name="CreationDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="Follows" Type="bigint" Nullable="false" />
           <Property Name="ShortUrl" Type="nvarchar" MaxLength="6" Nullable="false" />
         </EntityType>
@@ -22,6 +21,7 @@
           <Property Name="LinkId" Type="int" Nullable="false" />
           <Property Name="TokenId" Type="int" Nullable="false" />
           <Property Name="MapId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreationDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Tokens">
           <Key>
@@ -67,8 +67,7 @@
             <End Role="TokenMapping" EntitySet="TokenMapping" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="UrlShortenerBaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -78,7 +77,6 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Url" Type="String" MaxLength="850" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="Follows" Type="Int64" Nullable="false" />
           <Property Name="ShortUrl" Type="String" MaxLength="6" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="TokenMapping" Relationship="Self.FK_Links" FromRole="Links" ToRole="TokenMapping" />
@@ -92,6 +90,7 @@
           <Property Name="MapId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Links" Relationship="Self.FK_Links" FromRole="TokenMapping" ToRole="Links" />
           <NavigationProperty Name="Tokens" Relationship="Self.FK_Tokens" FromRole="TokenMapping" ToRole="Tokens" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="Tokens">
           <Key>
@@ -149,7 +148,6 @@
               <MappingFragment StoreEntitySet="Links">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Url" ColumnName="Url" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
                 <ScalarProperty Name="Follows" ColumnName="Follows" />
                 <ScalarProperty Name="ShortUrl" ColumnName="ShortUrl" />
               </MappingFragment>
@@ -158,6 +156,7 @@
           <EntitySetMapping Name="TokenMapping">
             <EntityTypeMapping TypeName="UrlShortenerBaseModel.TokenMapping">
               <MappingFragment StoreEntitySet="TokenMapping">
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
                 <ScalarProperty Name="LinkId" ColumnName="LinkId" />
                 <ScalarProperty Name="TokenId" ColumnName="TokenId" />
                 <ScalarProperty Name="MapId" ColumnName="MapId" />
