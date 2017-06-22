@@ -21,7 +21,7 @@ namespace URLShortener.Services
             var db = new UrlShortenerBaseEntities();
             var sortCol = Enum.IsDefined(typeof(SortCpoumnTypes), sortColumn)
                 ? (SortCpoumnTypes)sortColumn
-                : SortCpoumnTypes.CreatioDate;
+                : SortCpoumnTypes.CreationDate;
 
 
             return SortColumnChoise(sortCol,
@@ -58,7 +58,7 @@ namespace URLShortener.Services
                     return direction == SortDirection.Ascending
                         ? input.OrderBy(c => c.Links.ShortUrl)
                         : input.OrderByDescending(c => c.Links.ShortUrl);
-                case SortCpoumnTypes.CreatioDate:
+                case SortCpoumnTypes.CreationDate:
                     return direction == SortDirection.Ascending
                         ? input.OrderBy(c => c.Links.CreationDate)
                         : input.OrderByDescending(c => c.Links.CreationDate);
@@ -89,7 +89,7 @@ namespace URLShortener.Services
             /// <summary>
             /// дата создания
             /// </summary>
-            CreatioDate,
+            CreationDate,
             /// <summary>
             /// количестов переходдов по ссылке
             /// </summary>

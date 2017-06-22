@@ -33,7 +33,7 @@ namespace URLShortener.Controllers
         /// <param name="Direction">направление сортировки</param>
         /// <returns></returns>
         public ActionResult Show(int page = 1,
-            UserDataDisplay.SortCpoumnTypes Column = UserDataDisplay.SortCpoumnTypes.CreatioDate,
+            UserDataDisplay.SortCpoumnTypes Column = UserDataDisplay.SortCpoumnTypes.CreationDate,
             SortDirection Direction = SortDirection.Ascending)
         {
             try

@@ -54,6 +54,22 @@ textarea {
     background-color: #ff7d7d;
 }
 
+button {
+    font-weight: bold;
+    color: #555;
+    border: none;
+}
+
+button:active {
+    background-color: ButtonShadow;
+}
+
+th {
+    text-align: center;
+    padding: 5px;
+    text-decoration: none;
+}
+
 .menu-element {
     /*color: blue;*/
 }

@@ -7,8 +7,16 @@
 @model IPagination<URLShortener.Interfaces.IDisplayedLink>
 @{
     ViewBag.Title = "Мои ссылки";
-    var attributes = new Dictionary<string, object>();
-    attributes.Add("id","links-grid");
+    var attributes = new Dictionary<string, object>
+    {
+        {"style", "text-align: center; padding: 5px"}
+    };
+
+    var linkAttributes = new Dictionary<string, object>
+    {
+        {"style", "text-align: center; padding: 5px"},
+        { "class", "grid-cell-link"}
+    };
 }
 
 <!DOCTYPE html>
@@ -24,20 +32,23 @@
             Список моих ссылок:
         </div>
         <div class="row main-page-row col-lg-12 col-md-12 col-sm-12" style="border: double; border-color: #ebebff">
-            @Html.Pager(Model).Format("Ссылки {0} - {1} из {2}").First("1").Last(Model.TotalPages.ToString()).Next("Следующая").Previous("Предыдущая")
+            @Html.Pager(Model).Format("Ссылки: {0} - {1} из {2}      Страницы: ").First("1").Last(Model.TotalPages.ToString()).Next("Следующая").Previous("Предыдущая")
         </div>
         <div class="row main-page-row col-lg-12 col-md-12 col-sm-12">
             @if (Model != null)
             {
                 @Html.Grid(Model).Sort(ViewData["sort"] as GridSortOptions).Columns(columns =>
-                    {
-                        columns.For(c => c.OriginalLink).Named("Оригинальная ссылка")
-                        .HeaderAttributes(attributes);
-                        columns.For(c => $"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Content("~")}{c.ShortedLink}")
-                        .SortColumnName("ShortedLink").Named("Укороченная ссылка");
-                        columns.For(c => c.CreationDate.ToString("yyyy-MM-dd hh:mm")).Named("Дата создания");
-                        columns.For(c => c.Follows).Named("Количество переходов");
-                    }).Empty("У вас нет сохранённых ссылок")
+           {
+               columns.For(c => c.OriginalLink).Named("Оригинальная ссылка ").Attributes(c => linkAttributes);
+
+               columns.For(c => $"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Content("~")}{c.ShortedLink}")
+               .SortColumnName("ShortedLink").Named("Укороченная ссылка ").Attributes(c => linkAttributes);
+
+               columns.For(c => c.CreationDate.ToString("yyyy-MM-dd hh:mm")).Named("Дата создания ").SortColumnName("CreationDate")
+               .Attributes(c => attributes);
+
+               columns.For(c => c.Follows).Named("Количество переходов ").Attributes(c => attributes);
+           }).Empty("У вас нет сохранённых ссылок")
             }
             else
             {
