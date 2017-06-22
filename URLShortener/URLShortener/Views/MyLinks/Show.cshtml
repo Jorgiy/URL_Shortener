@@ -31,7 +31,7 @@
         <div class="row main-page-row">
             Список моих ссылок:
         </div>
-        <div class="row main-page-row col-lg-12 col-md-12 col-sm-12" id="page-navigation">
+        <div class="row main-page-row col-lg-12 col-md-12 col-sm-12">
             @Html.Pager(Model).Format("Ссылки: {0} - {1} из {2}      Страницы: ").First("1").Last(Model.TotalPages.ToString()).Next("Следующая").Previous("Предыдущая")
         </div>
         <div class="row main-page-row col-lg-12 col-md-12 col-sm-12">

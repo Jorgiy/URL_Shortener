@@ -18,6 +18,10 @@ function InitPage() {
         $(".sort_desc").find("a").append("<span class=\"glyphicon glyphicon-chevron-down\"></span>");
     };
 
+    self.addFrameToPagination = function () {
+        $(".paginationLeft").parent().parent().attr("style","border: double; border-color: #ebebff");
+    }
+
     /* методы для изсенения страницы после запроса на создание ссылки */
 
     self.newErrorElement = function (err) {
@@ -104,6 +108,8 @@ function InitPage() {
     };
     ko.applyBindings(viewModel);
 
+    // для таблицы ссылок пользователей
     self.addArrowsOnGrid();
     self.makeLinksFromRows();
+    self.addFrameToPagination();
 }
