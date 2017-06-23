@@ -21,30 +21,36 @@
 <script src="~/Scripts/mylinkspage.js"></script>
 <div class="container" id="page-content">
     <div class="row main-page-row">
-        Список моих ссылок:
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            Список моих ссылок:
+        </div>
     </div>
-    <div class="row main-page-row col-lg-12 col-md-12 col-sm-12">
+    <div class="row main-page-row">
+         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         @Html.Pager(Model).Format("Ссылки: {0} - {1} из {2}").First("      Страницы: 1").Last(Model.TotalPages.ToString()).Next("Следующая").Previous("Предыдущая")
+         </div>
     </div>
-    <div class="row main-page-row col-lg-12 col-md-12 col-sm-12">
+    <div class="row main-page-row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         @if (Model != null)
-            {
+        {
             @Html.Grid(Model).Sort(ViewData["sort"] as GridSortOptions).Columns(columns =>
-           {
-               columns.For(c => c.OriginalLink).Named("Оригинальная ссылка ").Attributes(c => linkAttributes);
+            {
+                columns.For(c => c.OriginalLink).Named("Оригинальная ссылка ").Attributes(c => linkAttributes);
 
-               columns.For(c => $"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Content("~")}{c.ShortedLink}")
-               .SortColumnName("ShortedLink").Named("Укороченная ссылка ").Attributes(c => linkAttributes);
+                columns.For(c => $"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Content("~")}{c.ShortedLink}")
+                    .SortColumnName("ShortedLink").Named("Укороченная ссылка ").Attributes(c => linkAttributes);
 
-               columns.For(c => c.CreationDate.ToString("yyyy-MM-dd HH:mm")).Named("Дата создания ").SortColumnName("CreationDate")
-               .Attributes(c => attributes);
+                columns.For(c => c.CreationDate.ToString("yyyy-MM-dd HH:mm")).Named("Дата создания ").SortColumnName("CreationDate")
+                    .Attributes(c => attributes);
 
-               columns.For(c => c.Follows).Named("Количество переходов ").Attributes(c => attributes);
-           }).Empty("У вас нет сохранённых ссылок")
+                columns.For(c => c.Follows).Named("Количество переходов ").Attributes(c => attributes);
+            }).Empty("У вас нет сохранённых ссылок")
         }
         else
         {
             @Html.Raw(ViewBag.ErrorMessage)
         }
+        </div>
     </div>
 </div>

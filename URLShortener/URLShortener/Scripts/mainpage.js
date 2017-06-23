@@ -29,7 +29,7 @@ function InitPage() {
         if ($("div").is(".error-row")) {
             $("div.error-header").remove();
         }
-        $(self.newErrorElement(errortext)).prependTo("div.container").show("slow");
+        $(self.newErrorElement(errortext)).prependTo("div#page-content.container").show("slow");
     };
     self.deleteError = function () {
         $("div.error-header").remove();
