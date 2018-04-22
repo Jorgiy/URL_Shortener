@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using AspNet.Mvc.Grid;
 using AspNet.Mvc.Grid.Pagination;
 using AspNet.Mvc.Grid.Sorting;
+using CommonTypes;
 using CoreServices.Interfaces;
 using CoreServices.Models;
 using NLog;
@@ -28,7 +29,7 @@ namespace URLShortener.Controllers
         /// <param name="column">sort column number</param>
         /// <param name="direction">sort direction</param>
         /// <returns></returns>
-        public ActionResult Show(int page = 1, int column = 0, SortDirection direction = SortDirection.Ascending)
+        public ActionResult Show(int page = 1, SortColumnTypes column = SortColumnTypes.CreationDate    , SortDirection direction = SortDirection.Ascending)
         {
             try
             {

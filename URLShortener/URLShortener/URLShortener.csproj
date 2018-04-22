@@ -237,6 +237,10 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonTypes\CommonTypes.csproj">
+      <Project>{133e77a0-811c-429c-b85a-f6cd5376c895}</Project>
+      <Name>CommonTypes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CoreServices\CoreServices.csproj">
       <Project>{ccf31bf5-0750-49ca-a0ca-e0d13fdec060}</Project>
       <Name>CoreServices</Name>

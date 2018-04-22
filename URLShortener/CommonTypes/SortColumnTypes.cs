@@ -1,6 +1,6 @@
-﻿namespace DataLayer.Models
+﻿namespace CommonTypes
 {
-    public enum SortCpoumnTypes : int
+    public enum SortColumnTypes : int
     {
         OriginalLink = 0,
         

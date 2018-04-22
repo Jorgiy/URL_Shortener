@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
 using AspNet.Mvc.Grid.Sorting;
+using CommonTypes;
 using DataLayer.DataContext;
 using DataLayer.Interfaces;
 using DataLayer.Models;
@@ -34,9 +35,9 @@ namespace DataLayer.Repositories
         {
             if (token == null) return new List<TokenMapping>();
             
-            var sortCol = Enum.IsDefined(typeof(SortCpoumnTypes), sortColumn)
-                ? (SortCpoumnTypes)sortColumn
-                : SortCpoumnTypes.CreationDate;
+            var sortCol = Enum.IsDefined(typeof(SortColumnTypes), sortColumn)
+                ? (SortColumnTypes)sortColumn
+                : SortColumnTypes.CreationDate;
 
 
             return SortColumnChoise(sortCol,
@@ -47,24 +48,24 @@ namespace DataLayer.Repositories
             );
         }
         
-        private IQueryable<TokenMapping> SortColumnChoise(SortCpoumnTypes column, IQueryable<TokenMapping> input,
+        private IQueryable<TokenMapping> SortColumnChoise(SortColumnTypes column, IQueryable<TokenMapping> input,
             SortDirection direction)
         {
             switch (column)
             {
-                case SortCpoumnTypes.OriginalLink:
+                case SortColumnTypes.OriginalLink:
                     return direction == SortDirection.Ascending
                         ? input.OrderBy(c => c.Link.Url)
                         : input.OrderByDescending(c => c.Link.Url);
-                case SortCpoumnTypes.ShortedLink:
+                case SortColumnTypes.ShortedLink:
                     return direction == SortDirection.Ascending
                         ? input.OrderBy(c => c.Link.ShortUrl)
                         : input.OrderByDescending(c => c.Link.ShortUrl);
-                case SortCpoumnTypes.CreationDate:
+                case SortColumnTypes.CreationDate:
                     return direction == SortDirection.Ascending
                         ? input.OrderBy(c => c.CreationDateTime)
                         : input.OrderByDescending(c => c.CreationDateTime);
-                case SortCpoumnTypes.Follows:
+                case SortColumnTypes.Follows:
                     return direction == SortDirection.Ascending
                         ? input.OrderBy(c => c.Link.Follows)
                         : input.OrderByDescending(c => c.Link.Follows);

@@ -55,7 +55,6 @@
     <Compile Include="Interfaces\ILinksRepository.cs" />
     <Compile Include="Interfaces\ITokenMappingRepository.cs" />
     <Compile Include="Interfaces\ITokenRepository.cs" />
-    <Compile Include="Models\SortCpoumnTypes.cs" />
     <Compile Include="Models\Link.cs">
       <DependentUpon>URLShortenerDB.tt</DependentUpon>
     </Compile>
@@ -71,6 +70,10 @@
     <Compile Include="Repositories\TokensRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonTypes\CommonTypes.csproj">
+      <Project>{133e77a0-811c-429c-b85a-f6cd5376c895}</Project>
+      <Name>CommonTypes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.csproj">
       <Project>{1E97833A-6102-4959-97BD-804065C7C91B}</Project>
       <Name>Utils</Name>
