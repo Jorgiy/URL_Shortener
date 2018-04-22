@@ -1,50 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using AspNet.Mvc.Grid;
 using AspNet.Mvc.Grid.Pagination;
 using AspNet.Mvc.Grid.Sorting;
-using URLShortener.Interfaces;
-using URLShortener.Services;
-using URLShortener.Tools;
+using CoreServices.Interfaces;
+using CoreServices.Models;
+using NLog;
 
 namespace URLShortener.Controllers
 {
     public class MyLinksController : Controller
     {
-        public MyLinksController()
+        private readonly IUserDataCoreService _userDataCoreService;
+
+        private readonly Logger _logger;
+        
+        public MyLinksController(IUserDataCoreService userDataCoreService)
         {
-            _userDataDisplay = new UserDataDisplay();
+            _userDataCoreService = userDataCoreService;
+            _logger = LogManager.GetCurrentClassLogger();
         }
 
         /// <summary>
-        /// сервис для отображения данных для пользователя
+        /// User's links display method 
         /// </summary>
-        private readonly IUserDataDisplay _userDataDisplay;
-
-        /// <summary>
-        /// Метод для отображения ссылок пользователя
-        /// </summary>
-        /// <param name="page">номер страницы</param>
-        /// <param name="Column">колонка для сортировки</param>
-        /// <param name="Direction">направление сортировки</param>
+        /// <param name="page">page number</param>
+        /// <param name="column">sort column number</param>
+        /// <param name="direction">sort direction</param>
         /// <returns></returns>
-        public ActionResult Show(int page = 1,
-            UserDataDisplay.SortCpoumnTypes Column = UserDataDisplay.SortCpoumnTypes.CreationDate,
-            SortDirection Direction = SortDirection.Ascending)
+        public ActionResult Show(int page = 1, int column = 0, SortDirection direction = SortDirection.Ascending)
         {
             try
             {
-                var result = _userDataDisplay.GetUserPaginatedLinks(
-                    Request.Cookies["token"]?.Value,
-                    10, Direction, (int) Column, page);
+                var result =
+                    _userDataCoreService.GetUserPaginatedLinks(Request.Cookies["token"]?.Value, direction,
+                        (int) column);
 
                 var sortOptions = new GridSortOptions
                 {
-                    Direction = Direction,
-                    Column = Column.ToString()
+                    Direction = direction,
+                    Column = column.ToString()
                 };
 
                 ViewData["sort"] = sortOptions;
@@ -53,13 +48,13 @@ namespace URLShortener.Controllers
             }
             catch (BuisenessException buisExc)
             {
-                Logger.Log(buisExc.ErrorLevel, $"{buisExc.Message}. {buisExc.InnerException?.Message}");
-                ViewBag.ErrorMessage = "При загрузке \"Моих ссылок\" произошла ошибка";
+                _logger.Error($"{buisExc.Message}. {buisExc.InnerException?.Message}");
+                ViewBag.ErrorMessage = "Error occured while \"My links\" loading";
             }
             catch (Exception exc)
             {
-                Logger.Log(ErrorType.Critical, exc.Message);
-                ViewBag.ErrorMessage = "При загрузке \"Моих ссылок\" произошла ошибка";
+                _logger.Fatal(exc.Message);
+                ViewBag.ErrorMessage = "Error occured while \"My links\" loading";
             }
 
             return View();

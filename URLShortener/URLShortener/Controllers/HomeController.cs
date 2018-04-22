@@ -1,34 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
-using URLShortener.Interfaces;
+using CoreServices.Interfaces;
+using CoreServices.Models;
+using NLog;
 using URLShortener.Models;
-using URLShortener.Services;
-using URLShortener.Tools;
 
 namespace URLShortener.Controllers
 {
     public class HomeController : Controller
     {
-        public HomeController()
-        {
-            // DI руками, не все хостинги поддерживают ASP.NET Core
-            _linkOperator = new LinkOperator();
-            _tokenOperations = new TokenOperations();
-        }
+        
+        private readonly ILinkCoreService _linkCoreService;
+       
+        private readonly ITokenCoreService _tokenCoreService;
 
-        /// <summary>
-        /// сервис по созданию ссылок
-        /// </summary>
-        private readonly ILinkOperator _linkOperator;
-        /// <summary>
-        /// сервис для определения связи "пользователь - ссылка"
-        /// </summary>
-        private readonly ITokenOperaions _tokenOperations;
+        private readonly Logger _logger;
+        
+        public HomeController(ILinkCoreService linkCoreService, ITokenCoreService tokenCoreService)
+        {
+            _linkCoreService = linkCoreService;
+            _tokenCoreService = tokenCoreService;
+            _logger = LogManager.GetCurrentClassLogger();
+        }
 
         [Route("")]
         public ActionResult Index()
@@ -37,27 +30,27 @@ namespace URLShortener.Controllers
         }
 
         /// <summary>
-        /// Поптка создать ссылку
+        /// Link creation attempt
         /// </summary>
-        /// <param name="url">исходная ссылка</param>
-        /// <param name="time">оффсет текущего часового пояса</param>
+        /// <param name="url">target url</param>
+        /// <param name="timeOffset">timezone offset</param>
         /// <returns></returns>
         [HttpPost]
-        public JsonResult CreateShortLink(string url, int time)
+        public JsonResult CreateShortLink(string url, int timeOffset)
         {
             try
             {
-                var creationResult = _linkOperator.CreateLink(url);
+                var creationResult = _linkCoreService.CreateLink(url);
                 if (!creationResult.Success)
                 {
                     return new JsonResult
                     {
-                        Data = new CreationLinkResultModel() { Success = false, ErrorMessage = creationResult.ErrorMessage }
+                        Data = new CreationLinkResultModel { Success = false, ErrorMessage = creationResult.ErrorMessage }
                     };
                 }
 
-                var tokenResult = _tokenOperations.CreateToken(creationResult.LinkId,
-                    DateTime.UtcNow.AddHours(time * -1), Request.Cookies["token"]?.Value);
+                var tokenResult = _tokenCoreService.MapLinkToToken(creationResult.LinkId,
+                    DateTime.UtcNow.AddHours(timeOffset * -1), Request.Cookies["token"]?.Value);
 
                 return new JsonResult
                 {
@@ -76,18 +69,18 @@ namespace URLShortener.Controllers
             }
             catch (BuisenessException buisExc)
             {
-                Logger.Log(buisExc.ErrorLevel, $"{buisExc.Message}. {buisExc.InnerException?.Message}");
+                _logger.Error($"{buisExc.Message}. {buisExc.InnerException?.Message}");
                 return new JsonResult
                 {
-                    Data = new CreationLinkResultModel() {Success = false, ErrorMessage = "Произошла ошибка"}
+                    Data = new CreationLinkResultModel {Success = false, ErrorMessage = "Error occured"}
                 };
             }
             catch (Exception exc)
             {
-                Logger.Log(ErrorType.Critical, exc.Message);
+                _logger.Fatal(exc.Message);
                 return new JsonResult
                 {
-                    Data = new CreationLinkResultModel() { Success = false, ErrorMessage = "Произошла ошибка" }
+                    Data = new CreationLinkResultModel() { Success = false, ErrorMessage = "Error occured" }
                 };
             }
         }
@@ -101,7 +94,7 @@ namespace URLShortener.Controllers
         {
             var shorturl = Url.RequestContext.RouteData.Values["url"]?.ToString(); 
 
-            var originalLink = _linkOperator.ReturnOriginalLink(shorturl);
+            var originalLink = _linkCoreService.ReturnOriginalLink(shorturl);
 
             if (originalLink == null)
             {
@@ -110,7 +103,7 @@ namespace URLShortener.Controllers
             }
             else
             {
-                _linkOperator.IncrementFollows(shorturl);
+                _linkCoreService.IncrementFollows(shorturl);
                 Response.Redirect(originalLink);
                 return View();
             }

@@ -64,7 +64,7 @@ function InitPage() {
                     data:
                     {
                         url: input,
-                        time: new Date().getTimezoneOffset() / 60
+                        timeOffset: new Date().getTimezoneOffset() / 60
                     },
                     success: function (res) {
                         if (res.ErrorMessage != null) self.addError(res.ErrorMessage);
