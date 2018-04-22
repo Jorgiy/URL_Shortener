@@ -27,7 +27,7 @@ namespace DataLayer.Repositories
 
         public bool HasUserLink(int tokenId, int linkId)
         {
-            return _dbContext.TokenMappings.Any(x => x.TokenId == tokenId && x.LinkId == tokenId);
+            return _dbContext.TokenMappings.Any(x => x.TokenId == tokenId && x.LinkId == linkId);
         }
 
         public IEnumerable<TokenMapping> GetFullLinkInformationByToken(string token, SortDirection sortDirection, int sortColumn)

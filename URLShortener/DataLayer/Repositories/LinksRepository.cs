@@ -30,7 +30,7 @@ namespace DataLayer.Repositories
                 var addedLink = _dbContext.Links.Add(insertEntity);
                 _dbContext.SaveChanges();
 
-                var addedLinkForUpdateShortUrl = _dbContext.Links.Single();
+                var addedLinkForUpdateShortUrl = _dbContext.Links.Single(x => x.Id == addedLink.Id);
                 addedLinkForUpdateShortUrl.ShortUrl =
                     conversionProvider.ConvertIdToShortenString(addedLinkForUpdateShortUrl.Id);
                 _dbContext.SaveChanges();
