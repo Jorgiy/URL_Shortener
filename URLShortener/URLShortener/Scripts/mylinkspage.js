@@ -18,7 +18,7 @@ function InitPage() {
 
     self.addFrameToPagination = function () {
         $(".paginationLeft").parent().parent().attr("style", "border: double; border-color: #ebebff");
-    }
+    };
 
     self.addArrowsOnGrid();
     self.makeLinksFromRows();

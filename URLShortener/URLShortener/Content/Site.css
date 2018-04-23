@@ -36,8 +36,7 @@ textarea {
 
 #copy-button {
     border: 0;
-    background: transparent;
-    visibility: hidden;
+    background: transparent;    
 }
 
 #text-box-input {

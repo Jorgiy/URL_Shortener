@@ -1,26 +1,37 @@
 ﻿@{
     ViewBag.Title = "URL Shortener";
 }
-<script src="~/Scripts/mainpage.js"></script>
-<div class="container" id="page-content">
-    <div class="row">
-        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12" id="title">
-            Make your links shorter
-        </div>
-    </div>
-    <div class="row main-page-row">
-        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-            <div id="link-text-box">
-                <input type="text" id="text-box-input" placeholder="type link here" style="padding-left: 2%"/>
-                <button id="copy-button" data-clipboard-target="#text-box-input" title="Copy">
-                    <span class="glyphicon glyphicon-file"></span>
-                </button>
+<script src="~/Scripts/mainpageCtrl.js"></script>
+<div ng-app="App" ng-controller="mainpageController as mainpageCtrl">
+    <div class="container" id="page-content">
+        <div class="row main-page-row error-header" ng-show="mainpageCtrl.errorOccured">
+            <div class="col-md-6 col-lg-6 col-sm-6 error-row">
+                {{ mainpageCtrl.errorText }}
             </div>
         </div>
-    </div>
-    <div class="row main-page-row">
-        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12" id="main-button-container">
-            <button class="main-button" id="shorten-button" data-bind="click: shortLink">Shorten!</button>
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12" id="title">
+                {{ mainpageCtrl.titleText }}
+            </div>
+        </div>
+        <div class="row main-page-row">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                <div id="link-text-box">
+                    <input type="text" id="text-box-input" placeholder="type link here" 
+                           style="padding-left: 2%" ng-model="mainpageCtrl.urlForShortening"/>
+                    <button id="copy-button" data-clipboard-target="#text-box-input" 
+                            ng-show="mainpageCtrl.linkCreated" title="Copy" ng-enabled="mainpageCtrl.linkCreated">
+                        <span class="glyphicon glyphicon-file"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row main-page-row">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12" id="main-button-container">
+                <button class="main-button" id="shorten-button" ng-click="mainpageCtrl.createLink()" 
+                        ng-enabled="!mainpageCtrl.creationStarted">{{ mainpageCtrl.buttonText }}</button>
+                <img ng-if="mainpageCtrl.creationStarted" src="Content/loading.gif" alt="load-gif\">
+            </div>
         </div>
     </div>
 </div>
