@@ -82,7 +82,11 @@ namespace CoreServices.Implementations
         {
             try
             {
-                _linksRepository.IncrementFollows(shortenLink);
+                lock (_lockIncrementFollowsObject)
+                {
+                    _linksRepository.IncrementFollows(shortenLink);
+                }
+                
             }
             catch (Exception e)
             {
